@@ -1,0 +1,120 @@
+
+.menu .icon3{ background:url(/staticfile/style/defstyle/images/yunicon.png?temp=20180309) no-repeat}
+.menu .icon3 {width: 22px;height: 20px;display: inline-block;margin-left: 20px;vertical-align: middle;margin-right: 10px;}
+.menu .iconImg {width: 20px;height: 20px;display: inline-block;margin-left: 17px;vertical-align: middle;margin-right: 13px;}
+.menu .zne_kc_icon{ background-position:0px 0px;}
+/*.menu .zne_ds_icon{ background-position:-23px 0px;}*/
+.menu .zne_bj_icon{ background-position:-48px 0px;}
+.menu .zne_zt_icon{ background-position:-73px 0px;}
+.menu .zne_yp_icon{ background-position:-97px 0px;}
+.menu .zne_qz_icon{ background-position:-172px -2px;}
+.menu .zne_cz_icon{ background-position:-122px 0px;}
+/*.menu .zne_bz_icon{ background-position:-146px -1px;}*/
+.menu .zne_bz_icon{ background-position:-1120px -1px;}
+.menu .zne_xxttj_icon{ background-position:-1082px 0px;}
+.menu .zne_dy_icon{ background-position:-197px 0px;}
+
+
+/*2014 11 26 zzl æ–°å¢žå›¾æ ‡*/
+.menu .zne_dt_icon{ background-position:-1011px 0px;}
+.menu .zne_rz_icon{ background-position:-247px 0px;}
+.menu .zne_zj_icon{ background-position:-271px 0px;}
+.menu .zne_xz_icon{ background-position:-294px 0px;}
+.menu .zne_sc_icon{ background-position:-319px 0px;}
+.menu .zne_jh_icon{ background-position:-343px 0px;}
+.menu .zne_sp_icon{ background-position:-369px 0px;}
+.menu .zne_rw_icon{ background-position:-393px -1px;}
+.menu .zne_ds_icon{ background-position:-419px 0px;}
+.menu .zne_xx_icon{ background-position:-447px 0px;}
+.menu .zne_kb_icon{ background-position:-470px 0px;}
+.menu .zne_yyd_icon{ background-position:-500px 0px;}
+.menu .zne_rc_icon{ background-position:-522px 0px;}
+.menu .zne_dc_icon{ background-position:-549px 0px;}
+.menu .zne_jc_icon{ background-position:-574px 0px;}
+.menu .zne_wk_icon{ background-position:-601px 0px;}
+.menu .zne_zzwk_icon{ background-position:-628px 0px;}
+.menu .zne_ckzx_icon{ background-position:-653px 0px;}
+
+
+
+/*2016 12 27 zzl æ–°å¢žå›¾æ ‡,æ”¹ç‰ˆæ—¶å¢žåŠ */
+.menu .zne_sy_icon{ background-position:-686px -1px;}
+.menu .zne_sf_icon{ background-position:-717px -1px;}
+.menu .zne_wdkc_icon{ background-position:-1045px -1px;}
+.menu .zne_tbyp_icon{ background-position:-777px -1px;}
+.menu .zne_ztjs_icon{ background-position:-806px 0px;}
+.menu .zne_wdxz_icon{ background-position:-836px 1px;}
+.menu .zne_wdbj_icon{ background-position:-867px -1px;}
+.menu .zne_tz_icon{ background-position:-897px -1px;}
+.menu .zne_txl_icon{ background-position:-927px -1px;}
+.menu .zne_lwjc_icon{ background-position:-958px -1px;}
+.menu .zne_ztcj_icon{ background-position:-1009px -1px;}
+
+
+/*.active .wdkc_icon{ width:20px; height:20px; display:block; float:left; background-position:-159px 0; margin:10px 5px 0 10px;_margin:10px 5px 0 5px;}
+*/.active a{color:#FFF;}
+.setpage{ display:block; background:#f3f3f3; border-bottom:1px solid #d5d5dc; border-top:1px solid #d5d5dc; border-right:1px solid #cccccc; line-height:38px; height:38px; margin:0px 0 15px 0; font-size:14px;}
+/*.setpage .wdkc_icon{ width:20px; height:20px; display:block; float:left; background-position:-158px -27px; margin:10px 5px 0 10px;_margin:10px 5px 0 5px;}
+*/
+.funclist .addfunc{ background:#e4e4e7; height:20px; line-height:20px; padding:0 10px; border-right:1px solid #cccccc;}
+.funclist .greyadd{ width:16px; height:16px; background-position:-1px 0; margin:2px 2px 0 0px;}
+.funclist .addfunc a{ color:#555555;}
+
+.menu .jiaoyu_icon{ background-position:-429px -1px;}
+
+.menu .yp_icon{ background-position:-18px 2px;}
+.menu .sj_icon{ background-position:-40px 0;}
+.menu .bz_icon{ background-position:-63px 0;}
+.menu .yyd_icon{ background-position:-83px 0;}
+.menu .rcb_icon{ background-position:-106px 0;}
+.menu .xz_icon{ background-position:-131px 0;}
+.menu .wdkc_icon{ background-position:-158px -27px;}
+.menu .node_icon{ background-position:-185px -1px;}
+.menu .nes_icon{ background-position:-211px -1px;}
+.menu .coll_icon{ background-position:-237px -1px;}
+.menu .duxiu_icon{ background-position:-259px -1px;}
+.menu .diaocha_icon{ background-position:-281px -1px;}
+.menu .kecheng_icon{ background-position:-302px -1px;}
+.menu .jihua_icon{ background-position:-323px -1px;}
+.menu .banji_icon{ background-position:-344px -1px;}
+.menu .zhongdoc_icon{ background-position:-365px -1px;}
+.menu .weikecheng_icon{ background-position:-387px -1px;}
+.menu .scd_icon{ background-position:-408px -1px;}
+.menu .scd_icon{ background-position:-408px -1px;}
+.menu .jianao_icon{ background:url(../images/dzja_icon_1.png) no-repeat;}
+
+.menu .add_icon{ background:url(../images/notes.gif) no-repeat 0 -130px;}
+
+
+
+
+/*72014.7.25å›¾æ ‡*/
+.menu .zzwenk{ background:url(../images/icon/zzwenku2.png) no-repeat}
+
+.menu .lunwenjc{background-position:-495px -1px;}
+
+.menu .xiaoxi{background:url(../images/icon/xiaoxi1.png) no-repeat}
+
+
+.zuserInfo_link {
+    text-align: center;
+}
+.zuserInfo_link a {
+    color: #7b9e31;
+    display: inline-block;
+    font-size: 14px;
+    height: 22px;
+    line-height: 22px;
+    text-align: center;
+}
+
+
+
+
+
+
+
+
+
+
+

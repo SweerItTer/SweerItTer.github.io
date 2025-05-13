@@ -1,0 +1,83 @@
+//滚动条
+var scrollEles = [$(".menu"),$(".code-box .app-list"),$(".selection .list")];
+scrollEles.forEach(function(ele){
+	ele.mCustomScrollbar({theme:"dark"});
+})
+//显示输入邀请码弹出层
+$(".left-top .icon").on("click",function(event){
+	event.stopPropagation();
+	var codeBox = $(".code-box");
+	if(codeBox.is(":hidden")){
+		$(".user-popup").fadeOut(300);
+		$(".help-popup").fadeOut(300);
+		$(this).addClass("icon-up");
+		codeBox.fadeIn(300);
+	}else{
+		$(this).removeClass("icon-up");
+		codeBox.fadeOut(300);
+	}
+})
+$(".code-box").on("click",function(event){
+	event.stopPropagation();
+})
+
+//帮助中心点击事件
+$(".help").on("click",function(event){
+	event.stopPropagation();
+	var helpPopup = $(".help-popup");
+	if(helpPopup.is(":hidden")){
+		$(".code-box").fadeOut(300);
+		$(".user-popup").fadeOut(300);
+		helpPopup.fadeIn(300);
+		$(this).find(".icon-down02").addClass("icon-up02");
+	}else{
+		helpPopup.fadeOut(300);
+		$(this).find(".icon-down02").removeClass("icon-up02");
+	}
+})
+$(".help-popup").on("click",function(event){
+	event.stopPropagation();
+})
+
+//用户点击事件
+$(".user").on("click",function(event){
+	event.stopPropagation();
+	var userPopup = $(".user-popup");
+	if(userPopup.is(":hidden")){
+		$(".code-box").fadeOut(300);
+		$(".help-popup").fadeOut(300);
+		userPopup.fadeIn(300);
+		$(this).find(".icon-down02").addClass("icon-up02");
+	}else{
+		userPopup.fadeOut(300);
+		$(this).find(".icon-down02").removeClass("icon-up02");
+	}
+})
+$(".user-popup").on("click",function(event){
+	event.stopPropagation();
+})
+
+
+//点击其他地方小窗口隐藏
+$(document).on("click",function(){
+	$(".code-box").hide();
+	$(".help-popup").hide();
+	$(".user-popup").hide();
+})
+
+//菜单滑过事件
+//$(".menu li").hover(function(){
+//	var classes = $(this).find(".icon2").attr("class");
+//	classArr = classes.s
+//})
+
+//多选框
+$(".select").on("click",function(){
+	$(this).toggleClass("selected");
+})
+
+//
+$(".code-box .edit").on("click",function(){
+	$(".code-box .select").css("display","inline-block").show();
+	$(this).css("color","#F01414").text("确定删除");
+})

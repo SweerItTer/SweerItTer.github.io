@@ -1,0 +1,108 @@
+/* 参数options介绍:
+ * dom：添加分页的ul选择器名，不是对象（必填）
+ * conts：数据总数
+ * maxSize：最多显示的分页块，多出用…（必填）
+ * pageSize: 多少页（必填）
+ * onClick: 点击之后的回调函数，返回当前页数
+ */
+
+(function() {
+
+	var options_, dom;
+
+	window["Paging"] = {
+		bind: function(options) {
+			options_ = options;
+			dom = $(options_.dom);
+			init();
+		}
+	}
+
+	function init() {
+		//渲染
+		function render(curIndex) { //curIndex当前页数
+			var html = '<li class="prev">上一页</li>',
+				size = options_.pageSize > options_.maxSize ? options_.maxSize : options_.pageSize,
+				half_val = (size - 4) / 2,
+				start,
+				end;
+			if(options_.pageSize <= options_.maxSize){
+				for(var i = 1;i<=options_.pageSize;i++){
+					html += '<li data-index=' + i + '>' + i + '</li>';
+				}
+			}else{
+				html += '<li data-index=1>1</li>'
+				if(curIndex <= Math.ceil(half_val)) {
+					start = 2;
+					end = size - 2;
+				} else if(curIndex <= options_.pageSize && curIndex >= options_.pageSize - (size - 2)) {
+					start = options_.pageSize - (size - 2);
+					end = options_.pageSize-1;
+				} else {
+					start = curIndex - Math.ceil(half_val) + 1;
+					end = curIndex + Math.floor(half_val);
+				}
+	
+				if( curIndex > Math.ceil(half_val) ){
+					html += '<li class="dot">…</li>';
+				}
+	
+				for(var i = start; i <= end; i++) {
+					html += '<li data-index=' + i + '>' + i + '</li>';
+				}
+	
+				if(curIndex <= (options_.pageSize - (size - 2))) {
+					html += '<li class="dot">…</li>';
+				}
+				html += '<li data-index=' + options_.pageSize + '>' + options_.pageSize + '</li>';
+			}
+			
+			html += '<li class="next">下一页</li>';
+			dom.html(html);
+			
+			$(options_.dom).find("li[data-index=" + curIndex + "]").addClass("active");
+		};
+		render(1);
+
+		dom.on("click", "li", function() {
+			var _this = $(this),
+				curPage = parseInt($(options_.dom).find("li.active").attr("data-index")),
+				curLi;
+			if(_this.hasClass("prev")) { //上一页
+				curLi =  $(options_.dom).find("li[data-index=" + curPage + "]");
+				curPage = curPage === 1 ? 1 : curPage - 1;
+				if(curLi.next().hasClass("dot") || curLi.prev().hasClass("dot")) { //到临界点了
+					render(curPage);
+					return;
+				}else{
+					curLi = $(options_.dom).find("li[data-index=" + curPage + "]");
+				}
+			} else if(_this.hasClass("next")) { //下一页
+				curLi =  $(options_.dom).find("li[data-index=" + curPage + "]");
+				curPage = curPage === options_.pageSize ? options_.pageSize : curPage + 1;
+				if(curLi.next().hasClass("dot") || curLi.prev().hasClass("dot")) { //到临界点了
+					render(curPage);
+					return;
+				}else{
+					curLi = $(options_.dom).find("li[data-index=" + curPage + "]");
+				}
+			} else if(_this.hasClass("dot")) { //三个点
+				return;
+			} else if(parseInt(_this.attr("data-index")) === options_.pageSize && _this.prev().hasClass("dot")){//最后一页
+				curPage = options_.pageSize;
+				render(curPage);
+				return;
+			}else if(_this.next().hasClass("dot") || _this.prev().hasClass("dot")) { //到临界点了
+				curPage = parseInt(_this.attr("data-index"));
+				render(curPage);
+				return;
+			} else {
+				curPage = parseInt(_this.attr("data-index") );
+				curLi = _this;
+			}
+			curLi.addClass("active").siblings().removeClass("active");
+			options_.onClick(curPage);
+		})
+	}
+
+})()
