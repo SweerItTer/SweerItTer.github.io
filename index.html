@@ -1,1 +1,178 @@
-Hello World
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SweerItTer - 开发者简介</title>
+    <style>
+        :root {
+            --color-1: rgba(255, 182, 193, 0.8);  /* 浅粉色 */
+            --color-2: rgba(173, 216, 230, 0.8);  /* 浅蓝色 */
+            --color-3: rgba(255, 228, 181, 0.8);  /* 浅橙色 */
+            --color-4: rgba(152, 251, 152, 0.8);  /* 浅绿色 */
+            --color-5: rgba(216, 191, 216, 0.8);  /* 浅紫色 */
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 20px auto;
+            object-fit: cover;
+        }
+
+        .section {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .tech-stack, .project-stack {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .tech-item, .project-item {
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .tech-item {
+            background: #f0f0f0;
+        }
+
+        .project-item {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .project-item:nth-child(1) { background-color: var(--color-1); }
+        .project-item:nth-child(2) { background-color: var(--color-2); }
+        .project-item:nth-child(3) { background-color: var(--color-3); }
+        .project-item:nth-child(4) { background-color: var(--color-4); }
+        .project-item:nth-child(5) { background-color: var(--color-5); }
+
+        .tech-item:hover, .project-item:hover {
+            transform: translateY(-5px);
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .repo-button {
+            display: inline-block;
+            background-color: rgba(255, 255, 255, 0.7);
+            color: #333;
+            padding: 8px 16px;
+            border-radius: 20px;
+            margin-top: 10px;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+
+        .repo-button:hover {
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .project-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .project-desc {
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <!-- 用户可自行上传头像至images/avatar.jpg -->
+        <img src="images/avatar.jpg" alt="头像" class="avatar">
+        <h1>SweerItTer</h1>
+        <p>全栈开发者 | 开源爱好者</p>
+        <a href="https://github.com/SweerItTer" target="_blank">GitHub 主页</a>
+    </div>
+
+    <div class="section">
+        <h2>技术栈</h2>
+        <div class="tech-stack">
+            <div class="tech-item">Python</div>
+            <div class="tech-item">C++</div>
+            <div class="tech-item">Go</div>
+            <div class="tech-item">JavaScript</div>
+            <div class="tech-item">Cloudflare Workers</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>项目经验</h2>
+        <div class="project-stack">
+            <div class="project-item">
+                <div class="project-title">Bilibili 动漫批量下载工具</div>
+                <div class="project-desc">使用 Python 开发的自动化下载工具，支持批量下载 Bilibili 动漫</div>
+                <a href="https://github.com/SweerItTer/BilibiliAnimeDownloader" target="_blank" class="repo-button">
+                    <i class="fa fa-github"></i> 查看仓库
+                </a>
+            </div>
+            
+            <div class="project-item">
+                <div class="project-title">音乐缓存文件格式转换工具</div>
+                <div class="project-desc">基于 Python 实现的音乐缓存转换工具，支持 UC2MP3 或 FLAC 格式转换</div>
+                <a href="https://github.com/SweerItTer/UC2MP3orFLAC" target="_blank" class="repo-button">
+                    <i class="fa fa-github"></i> 查看仓库
+                </a>
+            </div>
+            
+            <div class="project-item">
+                <div class="project-title">实时人脸识别系统</div>
+                <div class="project-desc">基于 C++ 和 TensorFlow 构建的深度学习人脸识别系统，支持实时检测</div>
+                <a href="https://github.com/SweerItTer/facerecognition" target="_blank" class="repo-button">
+                    <i class="fa fa-github"></i> 查看仓库
+                </a>
+            </div>
+            
+            <div class="project-item">
+                <div class="project-title">本地云存储解决方案</div>
+                <div class="project-desc">使用 Go 语言开发的本地云存储系统，结合内网穿透技术实现文件管理</div>
+                <a href="https://github.com/SweerItTer/LocalCloud" target="_blank" class="repo-button">
+                    <i class="fa fa-github"></i> 查看仓库
+                </a>
+            </div>
+            
+            <div class="project-item">
+                <div class="project-title">订阅聚合服务</div>
+                <div class="project-desc">基于 Cloudflare Workers 开发的订阅聚合工具，支持多源订阅合并</div>
+                <a href="https://github.com/SweerItTer/CF-Workers-SUB" target="_blank" class="repo-button">
+                    <i class="fa fa-github"></i> 查看仓库
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
