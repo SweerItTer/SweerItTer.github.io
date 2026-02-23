@@ -105,18 +105,10 @@ function initMarkdownParser() {
 
 function initCodeHighlight() {
   if (typeof hljs === 'undefined') {
-    const coreScript = document.createElement('script');
-    coreScript.src = 'https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/core.min.js';
-    coreScript.async = true;
-    document.head.appendChild(coreScript);
-
-    const languages = ['javascript', 'python', 'java', 'cpp', 'html', 'css', 'json', 'bash', 'sql', 'typescript'];
-    languages.forEach(lang => {
-      const langScript = document.createElement('script');
-      langScript.src = `https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/${lang}.min.js`;
-      langScript.async = true;
-      document.head.appendChild(langScript);
-    });
+    const bundleScript = document.createElement('script');
+    bundleScript.src = 'https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/highlight.min.js';
+    bundleScript.async = true;
+    document.head.appendChild(bundleScript);
 
     const styleLink = document.createElement('link');
     styleLink.rel = 'stylesheet';
