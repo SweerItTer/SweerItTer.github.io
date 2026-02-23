@@ -12,6 +12,8 @@
     owner: 'SweerItTer',
     repo: 'SweerItTer.github.io',
     branch: 'main',
-    articlesPath: 'articles'
+    articlesPath: 'articles',
+    indexFile: 'articles/articles.index.json',
+    fallbackFiles: ['hello-world.md']
   }
 };

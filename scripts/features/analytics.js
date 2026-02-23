@@ -36,9 +36,9 @@ export function renderAnalytics(containerEl) {
 }
 
 function lockValuesPerSession() {
-  const hashKey = window.location.hash || 'page';
-  const pvKey = `pv:${hashKey}`;
-  const uvKey = `uv:${hashKey}`;
+  const pageKey = resolveAnalyticsPageKey();
+  const pvKey = `pv:${pageKey}`;
+  const uvKey = `uv:${pageKey}`;
 
   const pvEl = document.getElementById('busuanzi_value_page_pv');
   const uvEl = document.getElementById('busuanzi_value_page_uv');
@@ -65,6 +65,15 @@ function lockValuesPerSession() {
 
   observer.observe(pvEl, { childList: true, subtree: true });
   observer.observe(uvEl, { childList: true, subtree: true });
+}
+
+function resolveAnalyticsPageKey() {
+  const params = new URLSearchParams(window.location.search);
+  const articleId = (params.get('id') || '').trim();
+  if (articleId) {
+    return `article:${articleId}`;
+  }
+  return `path:${window.location.pathname}`;
 }
 
 function applyLockedValues(pvEl, uvEl, pvValue, uvValue) {

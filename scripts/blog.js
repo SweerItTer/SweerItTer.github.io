@@ -2,7 +2,6 @@
 // 博客列表管理
 // ============================================
 
-import { navigate } from './router.js';
 import { fetchArticlesIndex } from './features/articles-source.js';
 
 let initialized = false;
@@ -74,6 +73,11 @@ async function loadArticles() {
     renderArticles();
   } catch (error) {
     console.error('Error loading articles:', error);
+    const message = String(error && error.message ? error.message : '');
+    if (message.includes('(403)')) {
+      showError('GitHub API 访问频率受限（403），请稍后重试');
+      return;
+    }
     showError('加载文章列表失败，请稍后重试');
   }
 }
@@ -139,7 +143,7 @@ function createArticleCard(article) {
   card.setAttribute('data-id', article.id);
 
   card.addEventListener('click', () => {
-    navigate(`article/${article.id}`);
+    window.location.href = `./article.html?id=${encodeURIComponent(article.id)}`;
   });
 
   const tagsHtml = article.tags && article.tags.length > 0

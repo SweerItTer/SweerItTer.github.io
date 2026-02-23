@@ -13,9 +13,24 @@ export function buildTOC(articleContentEl) {
   const header = document.createElement('div');
   header.className = 'article-toc-header';
 
-  const title = document.createElement('div');
-  title.className = 'toc-title';
-  title.textContent = '目录';
+  const topBtn = document.createElement('button');
+  topBtn.className = 'toc-top-btn';
+  topBtn.type = 'button';
+  topBtn.setAttribute('aria-label', '回到顶部');
+  topBtn.innerHTML = `
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 15l-6-6-6 6"/>
+    </svg>
+  `;
+  topBtn.addEventListener('click', () => {
+    const articleContainer = document.getElementById('article-container');
+    if (articleContainer) {
+      articleContainer.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    startTocChaseMotion(tocEl);
+  });
 
   const toggleBtn = document.createElement('button');
   toggleBtn.className = 'toc-toggle';
@@ -27,7 +42,7 @@ export function buildTOC(articleContentEl) {
     </svg>
   `;
 
-  header.appendChild(title);
+  header.appendChild(topBtn);
   header.appendChild(toggleBtn);
   tocEl.appendChild(header);
 
@@ -62,6 +77,7 @@ export function buildTOC(articleContentEl) {
     link.className = 'toc-link';
     link.textContent = heading.textContent || `Section ${index + 1}`;
     link.addEventListener('click', () => {
+      startTocChaseMotion(tocEl);
       heading.scrollIntoView({ behavior: 'smooth', block: 'start' });
       setTimeout(() => ensureInView(tocEl, link), 220);
     });
@@ -181,4 +197,11 @@ export function toggleTOCVisibility(shellEl) {
 
   const isCollapsed = shellEl.classList.toggle('toc-collapsed');
   appState.tocCollapsed = isCollapsed;
+}
+
+function startTocChaseMotion(tocEl) {
+  if (!tocEl) return;
+  tocEl.classList.remove('toc-chasing');
+  void tocEl.offsetWidth;
+  tocEl.classList.add('toc-chasing');
 }

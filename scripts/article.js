@@ -141,7 +141,8 @@ function renderMarkdown(content) {
     }
   });
 
-  const html = marked.parse(content);
+  const markdownWithoutFrontMatter = stripFrontMatter(content);
+  const html = marked.parse(markdownWithoutFrontMatter);
 
   articleContentEl.innerHTML = `
     <h1>${escapeHtml(currentArticle.title)}</h1>
@@ -191,21 +192,12 @@ function renderHTML(content) {
 }
 
 function updateTocOffset() {
-  const header = document.querySelector('.article-header');
-  const wrapper = document.querySelector('.article-wrapper');
-  const toc = document.getElementById('article-toc');
-  if (!header || !wrapper || !toc) return;
+  if (window.innerWidth <= 1024) {
+    document.documentElement.style.setProperty('--toc-top', '12px');
+    return;
+  }
 
-  const headerRect = header.getBoundingClientRect();
-  const wrapperRect = wrapper.getBoundingClientRect();
-  const tocWidth = toc.offsetWidth || 280;
-
-  const top = Math.max(24, Math.round(headerRect.bottom + 12));
-  const left = Math.max(12, Math.round(wrapperRect.left - tocWidth - 24));
-
-  document.documentElement.style.setProperty('--toc-top', `${top}px`);
-  document.documentElement.style.setProperty('--toc-left', `${left}px`);
-  document.documentElement.style.setProperty('--toc-offset', `${Math.max(24, tocWidth + 48)}px`);
+  document.documentElement.style.setProperty('--toc-top', '24px');
 }
 
 function showLoading() {
@@ -244,4 +236,9 @@ function escapeHtml(text) {
   const div = document.createElement('div');
   div.textContent = text;
   return div.innerHTML;
+}
+
+function stripFrontMatter(markdown) {
+  if (!markdown) return '';
+  return markdown.replace(/^\uFEFF?---\r?\n[\s\S]*?\r?\n---\r?\n?/, '');
 }
