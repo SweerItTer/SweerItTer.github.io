@@ -6,3 +6,4 @@
 - [ ] Update README/IMPLEMENTATION_PLAN for new content loading flow
 - [ ] Finish comments/likes integration checks
 - [ ] Finalize animation smoothing (no visual changes)
+- [ ] Add Monet light/dark mode (new requirement, deferred)
