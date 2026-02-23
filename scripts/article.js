@@ -25,6 +25,10 @@ export function initArticle() {
   initMarkdownParser();
   initCodeHighlight();
 
+  window.addEventListener('resize', () => {
+    updateTocOffset();
+  });
+
   initialized = true;
 }
 
@@ -188,10 +192,20 @@ function renderHTML(content) {
 
 function updateTocOffset() {
   const header = document.querySelector('.article-header');
-  if (!header) return;
-  const rect = header.getBoundingClientRect();
-  const top = Math.max(24, Math.round(rect.bottom + 12));
+  const wrapper = document.querySelector('.article-wrapper');
+  const toc = document.getElementById('article-toc');
+  if (!header || !wrapper || !toc) return;
+
+  const headerRect = header.getBoundingClientRect();
+  const wrapperRect = wrapper.getBoundingClientRect();
+  const tocWidth = toc.offsetWidth || 280;
+
+  const top = Math.max(24, Math.round(headerRect.bottom + 12));
+  const left = Math.max(12, Math.round(wrapperRect.left - tocWidth - 24));
+
   document.documentElement.style.setProperty('--toc-top', `${top}px`);
+  document.documentElement.style.setProperty('--toc-left', `${left}px`);
+  document.documentElement.style.setProperty('--toc-offset', `${Math.max(24, tocWidth + 48)}px`);
 }
 
 function showLoading() {

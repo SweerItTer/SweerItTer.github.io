@@ -203,11 +203,11 @@
 @media (min-width: 1200px) {
   .article-toc {
     position: fixed;
-    left: 24px;
+    left: var(--toc-left, 24px);
   }
 
   .article-shell {
-    padding-left: calc(var(--toc-width) + 48px);
+    padding-left: var(--toc-offset, calc(var(--toc-width) + 48px));
   }
 
   .article-shell.toc-collapsed {

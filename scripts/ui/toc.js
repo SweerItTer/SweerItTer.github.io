@@ -63,6 +63,7 @@ export function buildTOC(articleContentEl) {
     link.textContent = heading.textContent || `Section ${index + 1}`;
     link.addEventListener('click', () => {
       heading.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setTimeout(() => ensureInView(tocEl, link), 220);
     });
 
     item.appendChild(link);
