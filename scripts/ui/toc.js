@@ -21,7 +21,11 @@ export function buildTOC(articleContentEl) {
   toggleBtn.className = 'toc-toggle';
   toggleBtn.type = 'button';
   toggleBtn.setAttribute('aria-label', 'Toggle TOC');
-  toggleBtn.textContent = '>';
+  toggleBtn.innerHTML = `
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M15 18l-6-6 6-6"/>
+    </svg>
+  `;
 
   header.appendChild(title);
   header.appendChild(toggleBtn);
@@ -68,7 +72,7 @@ export function buildTOC(articleContentEl) {
   });
 
   addCaretControls(items);
-  initScrollSpy(items);
+  initScrollSpy(items, tocEl);
 
   toggleBtn.addEventListener('click', () => {
     toggleTOCVisibility(shellEl);
@@ -87,7 +91,11 @@ function addCaretControls(items) {
     caret.type = 'button';
     caret.className = 'toc-caret';
     caret.setAttribute('aria-label', 'Toggle section');
-    caret.textContent = '▾';
+    caret.innerHTML = `
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M6 9l6 6 6-6"/>
+      </svg>
+    `;
     caret.addEventListener('click', (event) => {
       event.stopPropagation();
       toggleSubtree(items, index, caret);
@@ -113,7 +121,11 @@ function toggleSubtree(items, startIndex, caret) {
   const isCollapsed = current.item.dataset.collapsed === 'true';
   const nextState = !isCollapsed;
   current.item.dataset.collapsed = nextState ? 'true' : 'false';
-  if (caret) caret.textContent = nextState ? '▸' : '▾';
+  if (caret) {
+    caret.innerHTML = nextState
+      ? `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>`
+      : `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>`;
+  }
 
   for (let i = startIndex + 1; i < items.length; i += 1) {
     const item = items[i];
@@ -128,7 +140,7 @@ function toggleSubtree(items, startIndex, caret) {
   }
 }
 
-function initScrollSpy(items) {
+function initScrollSpy(items, tocEl) {
   const observerOptions = {
     rootMargin: '-100px 0px -70% 0px',
     threshold: 0
@@ -142,6 +154,7 @@ function initScrollSpy(items) {
           item.link.classList.remove('active');
           if (item.heading.id === id) {
             item.link.classList.add('active');
+            ensureInView(tocEl, item.link);
           }
         });
       }
@@ -149,6 +162,17 @@ function initScrollSpy(items) {
   }, observerOptions);
 
   items.forEach(item => observer.observe(item.heading));
+}
+
+function ensureInView(container, element) {
+  if (!container || !element) return;
+  const cRect = container.getBoundingClientRect();
+  const eRect = element.getBoundingClientRect();
+  if (eRect.top < cRect.top) {
+    container.scrollTop -= (cRect.top - eRect.top + 12);
+  } else if (eRect.bottom > cRect.bottom) {
+    container.scrollTop += (eRect.bottom - cRect.bottom + 12);
+  }
 }
 
 export function toggleTOCVisibility(shellEl) {

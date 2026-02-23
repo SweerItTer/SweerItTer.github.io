@@ -156,6 +156,7 @@ function renderMarkdown(content) {
   renderAnalytics(articleContentEl);
   addComments(articleContentEl);
   initAnalytics();
+  updateTocOffset();
 }
 
 function renderHTML(content) {
@@ -182,6 +183,15 @@ function renderHTML(content) {
   renderAnalytics(articleContentEl);
   addComments(articleContentEl);
   initAnalytics();
+  updateTocOffset();
+}
+
+function updateTocOffset() {
+  const header = document.querySelector('.article-header');
+  if (!header) return;
+  const rect = header.getBoundingClientRect();
+  const top = Math.max(24, Math.round(rect.bottom + 12));
+  document.documentElement.style.setProperty('--toc-top', `${top}px`);
 }
 
 function showLoading() {
