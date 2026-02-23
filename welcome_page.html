@@ -79,11 +79,14 @@
                     返回列表
                 </button>
                 <div class="article-toolbar">
-                    <label class="theme-label" for="theme-select">主题</label>
-                    <select id="theme-select" class="theme-select">
-                        <option value="github">GitHub</option>
-                        <option value="claude">Claude</option>
-                    </select>
+                    <label class="theme-label">主题</label>
+                    <div class="theme-dropdown" id="theme-dropdown">
+                        <button class="theme-trigger" type="button">GitHub</button>
+                        <div class="theme-menu" hidden>
+                            <button class="theme-option" data-theme-value="github" type="button">GitHub</button>
+                            <button class="theme-option" data-theme-value="claude" type="button">Claude</button>
+                        </div>
+                    </div>
                 </div>
             </header>
 

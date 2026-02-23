@@ -626,6 +626,51 @@ body {
     border-color: var(--md-accent);
 }
 
+.theme-dropdown {
+    position: relative;
+}
+
+.theme-trigger {
+    background: var(--select-bg);
+    border: 1px solid var(--select-border);
+    border-radius: 8px;
+    color: var(--select-text);
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    min-width: 120px;
+    text-align: left;
+}
+
+.theme-menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    background: #0f0f0f;
+    border: 1px solid var(--select-border);
+    border-radius: 10px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    z-index: 50;
+}
+
+.theme-option {
+    background: transparent;
+    color: var(--select-text);
+    border: none;
+    padding: 8px 10px;
+    text-align: left;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.theme-option:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
 .article-content {
     color: rgba(255, 255, 255, 0.9);
     line-height: 1.8;

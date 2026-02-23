@@ -5,6 +5,7 @@
 import { buildTOC } from './ui/toc.js';
 import { addComments } from './features/comments.js';
 import { initAnalytics, renderAnalytics } from './features/analytics.js';
+import { fetchArticlesIndex } from './features/articles-source.js';
 
 let initialized = false;
 let currentArticleId = null;
@@ -36,13 +37,8 @@ export async function loadArticle(articleId) {
   showLoading();
 
   try {
-    const response = await fetch('articles/articles.json');
-    if (!response.ok) {
-      throw new Error('Failed to load articles.json');
-    }
-
-    const data = await response.json();
-    const article = data.articles.find(a => a.id === articleId);
+    const list = await fetchArticlesIndex();
+    const article = list.find(a => a.id === articleId);
 
     if (!article) {
       showError('文章不存在');

@@ -4,9 +4,9 @@
 
 **Goal:** Refactor the static blog for clean ES-module structure, add fixed/collapsible TOC, theme switching, analytics, and Giscus comments while preserving existing visuals.
 
-**Architecture:** Keep GitHub Pages static hosting. Use ES Modules with a small core/router and feature modules. Themes are CSS-only with `data-theme` switches. TOC is built client-side from rendered headings.
+**Architecture:** Keep GitHub Pages static hosting. Use ES Modules with a small core/router and feature modules. Themes are CSS-only with `data-theme` switches. TOC is built client-side from rendered headings. Article index is loaded dynamically via GitHub API from the `articles/` directory.
 
-**Tech Stack:** HTML, CSS, Vanilla JS (ES Modules), marked.js, highlight.js, Giscus, busuanzi.
+**Tech Stack:** HTML, CSS, Vanilla JS (ES Modules), marked.js, highlight.js, Giscus, busuanzi, GitHub API.
 
 ---
 
@@ -115,7 +115,7 @@ git commit -m "feat: add sticky collapsible TOC and layout toggle"
 
 **Step 1: Add theme dropdown**
 
-Add a `<select>` in article header to change `data-theme`.
+Add a custom dropdown in article header to change `data-theme` (avoid native select styling issues).
 
 **Step 2: Implement switching logic**
 
@@ -184,14 +184,14 @@ git commit -m "perf: smooth welcome animations"
 
 **Files:**
 - Delete: `css/style.css`
-- Delete: `articles/hello-world.md`
-- Delete: `articles/getting-started.md`
+- Delete: `articles/getting-started.md` (keep one sample for preview)
+- Delete: `articles/articles.json` (no longer used)
 - Modify: `README.md`
 - Modify: `IMPLEMENTATION_PLAN.md`
 
 **Step 1: Remove unused or sample files**
 
-Delete unused CSS and sample articles per request.
+Delete unused CSS, remove extra sample, and drop JSON index (now GitHub API based).
 
 **Step 2: Update README + plan**
 

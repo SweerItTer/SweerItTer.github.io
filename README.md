@@ -1,78 +1,78 @@
-# 个人博客 - Personal Blog
+﻿# 涓汉鍗氬 - Personal Blog
 
-一个基于 GitHub Pages 的静态博客系统，具有美观的欢迎页和完整的博客功能。
+涓€涓熀浜?GitHub Pages 鐨勯潤鎬佸崥瀹㈢郴缁燂紝鍏锋湁缇庤鐨勬杩庨〉鍜屽畬鏁寸殑鍗氬鍔熻兘銆?
 
-## 功能特性
+## 鍔熻兘鐗规€?
 
-- 🎨 **精美的欢迎页** - 带有渐变背景、粒子效果和丝滑动画
-- 📝 **博客系统** - 支持 Markdown 和 HTML 格式文章
-- 🔍 **搜索功能** - 支持标题、描述、标签的模糊搜索
-- 📊 **排序功能** - 按字母或时间排序
-- 💻 **代码高亮** - 支持多种编程语言的代码高亮
-- 📑 **目录导航** - 自动生成文章目录，支持滚动高亮
-- 💬 **评论系统** - 集成 Giscus（基于 GitHub Discussions）
-- 📱 **响应式设计** - 支持桌面、平板、手机
-- ⚡ **性能优化** - 优化的动画循环和内存管理
+- 馃帹 **绮剧編鐨勬杩庨〉** - 甯︽湁娓愬彉鑳屾櫙銆佺矑瀛愭晥鏋滃拰涓濇粦鍔ㄧ敾
+- 馃摑 **鍗氬绯荤粺** - 鏀寔 Markdown 鍜?HTML 鏍煎紡鏂囩珷
+- 馃攳 **鎼滅储鍔熻兘** - 鏀寔鏍囬銆佹弿杩般€佹爣绛剧殑妯＄硦鎼滅储
+- 馃搳 **鎺掑簭鍔熻兘** - 鎸夊瓧姣嶆垨鏃堕棿鎺掑簭
+- 馃捇 **浠ｇ爜楂樹寒** - 鏀寔澶氱缂栫▼璇█鐨勪唬鐮侀珮浜?
+- 馃搼 **鐩綍瀵艰埅** - 鑷姩鐢熸垚鏂囩珷鐩綍锛屾敮鎸佹粴鍔ㄩ珮浜?
+- 馃挰 **璇勮绯荤粺** - 闆嗘垚 Giscus锛堝熀浜?GitHub Discussions锛?
+- 馃摫 **鍝嶅簲寮忚璁?* - 鏀寔妗岄潰銆佸钩鏉裤€佹墜鏈?
+- 鈿?**鎬ц兘浼樺寲** - 浼樺寲鐨勫姩鐢诲惊鐜拰鍐呭瓨绠＄悊
 
-## 本地开发
+## 鏈湴寮€鍙?
 
-由于浏览器安全策略，直接打开 HTML 文件（`file://` 协议）会阻止加载本地 JSON 文件。需要使用本地服务器。
+鐢变簬娴忚鍣ㄥ畨鍏ㄧ瓥鐣ワ紝鐩存帴鎵撳紑 HTML 鏂囦欢锛坄file://` 鍗忚锛変細闃绘鍔犺浇鏈湴 JSON 鏂囦欢銆傞渶瑕佷娇鐢ㄦ湰鍦版湇鍔″櫒銆?
 
-### 方法一：使用 Python（推荐）
+### 鏂规硶涓€锛氫娇鐢?Python锛堟帹鑽愶級
 
-如果你已安装 Python 3：
+濡傛灉浣犲凡瀹夎 Python 3锛?
 
 ```bash
-# 在项目根目录下执行
+# 鍦ㄩ」鐩牴鐩綍涓嬫墽琛?
 python -m http.server 8000
 ```
 
-然后在浏览器中访问：`http://localhost:8000/welcome_page.html`
+鐒跺悗鍦ㄦ祻瑙堝櫒涓闂細`http://localhost:8000/welcome_page.html`
 
-### 方法二：使用 Node.js
+### 鏂规硶浜岋細浣跨敤 Node.js
 
-如果你已安装 Node.js：
+濡傛灉浣犲凡瀹夎 Node.js锛?
 
 ```bash
-# 安装 http-server（只需安装一次）
+# 瀹夎 http-server锛堝彧闇€瀹夎涓€娆★級
 npm install -g http-server
 
-# 在项目根目录下执行
+# 鍦ㄩ」鐩牴鐩綍涓嬫墽琛?
 http-server -p 8000
 ```
 
-然后在浏览器中访问：`http://localhost:8000/welcome_page.html`
+鐒跺悗鍦ㄦ祻瑙堝櫒涓闂細`http://localhost:8000/welcome_page.html`
 
-### 方法三：使用 VS Code Live Server
+### 鏂规硶涓夛細浣跨敤 VS Code Live Server
 
-如果你使用 VS Code：
+濡傛灉浣犱娇鐢?VS Code锛?
 
-1. 安装 "Live Server" 扩展
-2. 右键点击 `welcome_page.html`
-3. 选择 "Open with Live Server"
+1. 瀹夎 "Live Server" 鎵╁睍
+2. 鍙抽敭鐐瑰嚮 `welcome_page.html`
+3. 閫夋嫨 "Open with Live Server"
 
-## 添加文章
+## 娣诲姞鏂囩珷
 
-### 1. 创建文章文件
+### 1. 鍒涘缓鏂囩珷鏂囦欢
 
-在 `articles` 文件夹中创建新的 Markdown 或 HTML 文件。
+鍦?`articles` 鏂囦欢澶逛腑鍒涘缓鏂扮殑 Markdown 鎴?HTML 鏂囦欢銆?
 
-**示例（my-article.md）：**
+**绀轰緥锛坢y-article.md锛夛細**
 
 ```markdown
-# 文章标题
+# 鏂囩珷鏍囬
 
-文章摘要或简介...
+鏂囩珷鎽樿鎴栫畝浠?..
 
-## 第一部分
+## 绗竴閮ㄥ垎
 
-正文内容...
+姝ｆ枃鍐呭...
 
-## 第二部分
+## 绗簩閮ㄥ垎
 
-更多内容...
+鏇村鍐呭...
 
-### 代码示例
+### 浠ｇ爜绀轰緥
 
 ```javascript
 function hello() {
@@ -81,129 +81,107 @@ function hello() {
 ```
 ```
 
-### 2. 更新配置文件
-
-编辑 `articles/articles.json`，在 `articles` 数组中添加文章信息：
-
-```json
-{
-  "articles": [
-    {
-      "id": "my-article",
-      "title": "我的新文章",
-      "date": "2026-02-23",
-      "description": "这是一篇新文章的描述",
-      "file": "my-article.md",
-      "tags": ["tech", "tutorial"]
-    }
-  ]
-}
-```
-
-**字段说明：**
-
-| 字段 | 说明 | 必填 |
-|------|------|------|
-| `id` | 文章唯一标识符（用于 URL） | 是 |
-| `title` | 文章标题 | 是 |
-| `date` | 发布日期（YYYY-MM-DD 格式） | 是 |
-| `description` | 文章摘要 | 是 |
-| `file` | 文章文件名（必须在 articles 文件夹中） | 是 |
-| `tags` | 标签数组 | 否 |
-
-### 3. 提交到 GitHub
+### 2. 提交到 GitHub
 
 ```bash
+# 只需要提交文章文件
 git add articles/my-article.md
-git add articles/articles.json
 git commit -m "Add new article: my-article"
 git push origin main
 ```
 
-## 配置评论系统
+### 3. 鎻愪氦鍒?GitHub
 
-本博客使用 Giscus 评论系统，基于 GitHub Discussions。
+```bash
+git add articles/my-article.md
+git commit -m "Add new article: my-article"
+git push origin main
+```
 
-### 配置步骤
+## 閰嶇疆璇勮绯荤粺
 
-1. 访问 [Giscus 官网](https://giscus.app/)
-2. 按照提示配置：
-   - 输入你的 GitHub 仓库（如：`SweerItTer/SweerItTer.github.io`）
-   - 选择 Discussions 分类
-   - 选择语言和主题
-3. 复制生成的配置参数
-4. 编辑 `scripts/article.js`，找到 `addComments()` 函数
-5. 更新以下参数：
+鏈崥瀹娇鐢?Giscus 璇勮绯荤粺锛屽熀浜?GitHub Discussions銆?
+
+### 閰嶇疆姝ラ
+
+1. 璁块棶 [Giscus 瀹樼綉](https://giscus.app/)
+2. 鎸夌収鎻愮ず閰嶇疆锛?
+   - 杈撳叆浣犵殑 GitHub 浠撳簱锛堝锛歚SweerItTer/SweerItTer.github.io`锛?
+   - 閫夋嫨 Discussions 鍒嗙被
+   - 閫夋嫨璇█鍜屼富棰?
+3. 澶嶅埗鐢熸垚鐨勯厤缃弬鏁?
+4. 缂栬緫 `scripts/article.js`锛屾壘鍒?`addComments()` 鍑芥暟
+5. 鏇存柊浠ヤ笅鍙傛暟锛?
 
 ```javascript
 const giscusConfig = {
-    repo: '你的用户名/你的仓库名',     // 例如：SweerItTer/SweerItTer.github.io
-    repoId: '从 Giscus 获取的仓库 ID',
-    category: '选择的分类名称',
-    categoryId: '从 Giscus 获取的分类 ID'
+    repo: '浣犵殑鐢ㄦ埛鍚?浣犵殑浠撳簱鍚?,     // 渚嬪锛歋weerItTer/SweerItTer.github.io
+    repoId: '浠?Giscus 鑾峰彇鐨勪粨搴?ID',
+    category: '閫夋嫨鐨勫垎绫诲悕绉?,
+    categoryId: '浠?Giscus 鑾峰彇鐨勫垎绫?ID'
 };
 ```
 
-### 注意事项
+### 娉ㄦ剰浜嬮」
 
-- 仓库必须是公开的
-- 需要先在 GitHub 仓库中启用 Discussions 功能
-- 访客需要有 GitHub 账号才能评论
+- 浠撳簱蹇呴』鏄叕寮€鐨?
+- 闇€瑕佸厛鍦?GitHub 浠撳簱涓惎鐢?Discussions 鍔熻兘
+- 璁垮闇€瑕佹湁 GitHub 璐﹀彿鎵嶈兘璇勮
 
 ## 文件结构
 
 ```
 SweerItTer.github.io/
-├── articles/              # 文章文件夹
-│   ├── articles.json      # 文章配置文件
-│   ├── hello-world.md     # 示例文章 1
-│   └── getting-started.md # 示例文章 2
+├── articles/              # 文章文件夹（GitHub API 自动识别）
+│   └── hello-world.md     # 示例文章
 ├── scripts/               # JavaScript 脚本
-│   ├── main.js           # 欢迎页交互逻辑
-│   ├── router.js         # 路由管理器
-│   ├── blog.js           # 博客列表逻辑
-│   └── article.js        # 文章渲染逻辑
-├── styles/               # 样式文件
-│   └── main.css          # 包含所有样式
-├── css/                  # 备用样式文件
-│   └── style.css
-├── welcome_page.html     # 主 HTML 文件
-├── README.md             # 说明文档
-└── IMPLEMENTATION_PLAN.md # 实施计划文档
+│   ├── core/
+│   ├── features/
+│   └── ui/
+├── styles/                # 样式文件
+│   ├── main.css
+│   ├── base.css
+│   ├── layout.css
+│   ├── theme-github.css
+│   └── theme-claude.css
+├── config/
+│   └── site-config.js
+├── welcome_page.html
+└── README.md
 ```
 
 ## 自定义样式
 
-主要样式文件：`styles/main.css`
+涓昏鏍峰紡鏂囦欢锛歚styles/main.css`
 
-### 修改颜色主题
+### 淇敼棰滆壊涓婚
 
-找到以下变量并修改：
+鎵惧埌浠ヤ笅鍙橀噺骞朵慨鏀癸細
 
 ```css
-/* 主色调 */
---primary-color: #667eea;  /* 紫色 */
+/* 涓昏壊璋?*/
+--primary-color: #667eea;  /* 绱壊 */
 
-/* 辅助色 */
---secondary-color: #f093fb;  /* 粉色 */
+/* 杈呭姪鑹?*/
+--secondary-color: #f093fb;  /* 绮夎壊 */
 
-/* 背景色 */
---bg-color: #0a0a0a;  /* 深黑色 */
+/* 鑳屾櫙鑹?*/
+--bg-color: #0a0a0a;  /* 娣遍粦鑹?*/
 ```
 
-## 性能优化
+## 鎬ц兘浼樺寲
 
-本博客已进行多项性能优化：
+鏈崥瀹㈠凡杩涜澶氶」鎬ц兘浼樺寲锛?
 
-- **合并动画循环** - 将多个 `requestAnimationFrame` 循环合并
-- **对象池模式** - 粒子元素复用，减少 DOM 操作
-- **事件节流** - 对 `mousemove` 和 `resize` 事件进行节流
-- **CSS 动画** - 使用 CSS 动画替代部分 JavaScript 动画
-- **懒加载** - 博客内容只在需要时加载
+- **鍚堝苟鍔ㄧ敾寰幆** - 灏嗗涓?`requestAnimationFrame` 寰幆鍚堝苟
+- **瀵硅薄姹犳ā寮?* - 绮掑瓙鍏冪礌澶嶇敤锛屽噺灏?DOM 鎿嶄綔
+- **浜嬩欢鑺傛祦** - 瀵?`mousemove` 鍜?`resize` 浜嬩欢杩涜鑺傛祦
+- **CSS 鍔ㄧ敾** - 浣跨敤 CSS 鍔ㄧ敾鏇夸唬閮ㄥ垎 JavaScript 鍔ㄧ敾
+- **鎳掑姞杞?* - 鍗氬鍐呭鍙湪闇€瑕佹椂鍔犺浇
 
-## 代码高亮支持
+## 浠ｇ爜楂樹寒鏀寔
 
-支持以下编程语言：
+鏀寔浠ヤ笅缂栫▼璇█锛?
 
 - JavaScript / TypeScript
 - Python
@@ -214,18 +192,18 @@ SweerItTer.github.io/
 - Bash
 - SQL
 
-如需添加更多语言支持，编辑 `scripts/article.js` 的 `initCodeHighlight()` 函数。
+濡傞渶娣诲姞鏇村璇█鏀寔锛岀紪杈?`scripts/article.js` 鐨?`initCodeHighlight()` 鍑芥暟銆?
 
-## 部署到 GitHub Pages
+## 閮ㄧ讲鍒?GitHub Pages
 
-1. 将代码推送到 GitHub 仓库的 `main` 分支
-2. 访问仓库的 Settings → Pages
-3. 确保 Source 设置为 `Deploy from a branch`，分支为 `main`
-4. 几分钟后访问：`https://你的用户名.github.io/`
+1. 灏嗕唬鐮佹帹閫佸埌 GitHub 浠撳簱鐨?`main` 鍒嗘敮
+2. 璁块棶浠撳簱鐨?Settings 鈫?Pages
+3. 纭繚 Source 璁剧疆涓?`Deploy from a branch`锛屽垎鏀负 `main`
+4. 鍑犲垎閽熷悗璁块棶锛歚https://浣犵殑鐢ㄦ埛鍚?github.io/`
 
-## 常见问题
+## 甯歌闂
 
-### Q: 文章不显示？
+### Q: 鏂囩珷涓嶆樉绀猴紵
 
 ## Theme and Analytics (Added 2026-02-23)
 - Theme switcher: Article header includes a theme dropdown (GitHub / Claude).
@@ -233,39 +211,42 @@ SweerItTer.github.io/
 - Analytics: busuanzi enabled by default (display locked per session on the same article).
 - Structure: ES Modules under `scripts/`, themes in `styles/`.
 
-A: 检查以下几点：
-- 文件是否在 `articles` 文件夹中
-- `articles.json` 中是否正确配置了文章信息
-- 文件名是否与配置中的 `file` 字段匹配
-- 本地开发时是否使用了本地服务器
+A: 妫€鏌ヤ互涓嬪嚑鐐癸細
+- 鏂囦欢鏄惁鍦?`articles` 鏂囦欢澶逛腑
+- `` 涓槸鍚︽纭厤缃簡鏂囩珷淇℃伅
+- 鏂囦欢鍚嶆槸鍚︿笌閰嶇疆涓殑 `file` 瀛楁鍖归厤
+- 鏈湴寮€鍙戞椂鏄惁浣跨敤浜嗘湰鍦版湇鍔″櫒
 
-### Q: 搜索不工作？
+### Q: 鎼滅储涓嶅伐浣滐紵
 
-A: 刷新页面重试，或检查浏览器控制台是否有错误。
+A: 鍒锋柊椤甸潰閲嶈瘯锛屾垨妫€鏌ユ祻瑙堝櫒鎺у埗鍙版槸鍚︽湁閿欒銆?
 
-### Q: 代码不高亮？
+### Q: 浠ｇ爜涓嶉珮浜紵
 
-A: 检查网络连接，代码高亮库从 CDN 加载。
+A: 妫€鏌ョ綉缁滆繛鎺ワ紝浠ｇ爜楂樹寒搴撲粠 CDN 鍔犺浇銆?
 
-### Q: 评论功能显示"未启用"？
+### Q: 璇勮鍔熻兘鏄剧ず"鏈惎鐢?锛?
 
-A: 需要先配置 Giscus，参考上文"配置评论系统"部分。
+A: 闇€瑕佸厛閰嶇疆 Giscus锛屽弬鑰冧笂鏂?閰嶇疆璇勮绯荤粺"閮ㄥ垎銆?
 
-## 技术栈
+## 鎶€鏈爤
 
-| 功能 | 技术方案 |
+| 鍔熻兘 | 鎶€鏈柟妗?|
 |------|---------|
-| 前端框架 | 原生 JavaScript（无框架依赖） |
-| 路由 | Hash-based 路由 |
-| Markdown 解析 | marked.js |
-| 代码高亮 | highlight.js |
-| 评论系统 | Giscus |
-| 页面切换 | CSS transition + JavaScript |
+| 鍓嶇妗嗘灦 | 鍘熺敓 JavaScript锛堟棤妗嗘灦渚濊禆锛?|
+| 璺敱 | Hash-based 璺敱 |
+| Markdown 瑙ｆ瀽 | marked.js |
+| 浠ｇ爜楂樹寒 | highlight.js |
+| 璇勮绯荤粺 | Giscus |
+| 椤甸潰鍒囨崲 | CSS transition + JavaScript |
 
-## 许可证
+## 璁稿彲璇?
 
 MIT License
 
-## 联系方式
+## 鑱旂郴鏂瑰紡
 
-如有问题或建议，欢迎通过评论区或 GitHub Issues 联系。
+濡傛湁闂鎴栧缓璁紝娆㈣繋閫氳繃璇勮鍖烘垨 GitHub Issues 鑱旂郴銆?
+
+
+

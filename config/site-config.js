@@ -6,5 +6,12 @@
     repoId: '',
     category: 'Announcements',
     categoryId: ''
+  },
+  contentSource: {
+    provider: 'github',
+    owner: 'SweerItTer',
+    repo: 'SweerItTer.github.io',
+    branch: 'main',
+    articlesPath: 'articles'
   }
 };

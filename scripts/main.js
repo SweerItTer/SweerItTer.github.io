@@ -21,7 +21,7 @@ function initApp() {
   initNavigationButtons();
   initBlog();
   initArticle();
-  initThemeSwitch(document.getElementById('theme-select'));
+  initThemeSwitch(document.getElementById('theme-dropdown'));
   initRouter({ blog: loadBlog, article: loadArticle });
 }
 

@@ -3,6 +3,7 @@
 // ============================================
 
 import { navigate } from './router.js';
+import { fetchArticlesIndex } from './features/articles-source.js';
 
 let initialized = false;
 let articles = [];
@@ -38,6 +39,10 @@ export function loadBlog() {
   renderArticles();
 }
 
+export function getArticlesCache() {
+  return articles;
+}
+
 function initEventListeners() {
   if (searchInputEl) {
     let debounceTimer;
@@ -65,13 +70,7 @@ function initEventListeners() {
 
 async function loadArticles() {
   try {
-    const response = await fetch('articles/articles.json');
-    if (!response.ok) {
-      throw new Error('Failed to load articles.json');
-    }
-
-    const data = await response.json();
-    articles = data.articles || [];
+    articles = await fetchArticlesIndex();
     renderArticles();
   } catch (error) {
     console.error('Error loading articles:', error);
