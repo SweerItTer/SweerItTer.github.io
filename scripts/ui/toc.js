@@ -59,7 +59,6 @@ export function buildTOC(articleContentEl) {
     link.textContent = heading.textContent || `Section ${index + 1}`;
     link.addEventListener('click', () => {
       heading.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      toggleSubtree(items, index);
     });
 
     item.appendChild(link);
@@ -68,6 +67,7 @@ export function buildTOC(articleContentEl) {
     items.push({ item, link, level, heading });
   });
 
+  addCaretControls(items);
   initScrollSpy(items);
 
   toggleBtn.addEventListener('click', () => {
@@ -78,7 +78,34 @@ export function buildTOC(articleContentEl) {
   shellEl.classList.remove('toc-collapsed');
 }
 
-function toggleSubtree(items, startIndex) {
+function addCaretControls(items) {
+  items.forEach((current, index) => {
+    const hasChildren = findNextSameOrHigher(items, index) > index + 1;
+    if (!hasChildren) return;
+
+    const caret = document.createElement('button');
+    caret.type = 'button';
+    caret.className = 'toc-caret';
+    caret.setAttribute('aria-label', 'Toggle section');
+    caret.textContent = '▾';
+    caret.addEventListener('click', (event) => {
+      event.stopPropagation();
+      toggleSubtree(items, index, caret);
+    });
+
+    current.item.appendChild(caret);
+  });
+}
+
+function findNextSameOrHigher(items, startIndex) {
+  const baseLevel = items[startIndex].level;
+  for (let i = startIndex + 1; i < items.length; i += 1) {
+    if (items[i].level <= baseLevel) return i;
+  }
+  return items.length;
+}
+
+function toggleSubtree(items, startIndex, caret) {
   const current = items[startIndex];
   if (!current) return;
 
@@ -86,6 +113,7 @@ function toggleSubtree(items, startIndex) {
   const isCollapsed = current.item.dataset.collapsed === 'true';
   const nextState = !isCollapsed;
   current.item.dataset.collapsed = nextState ? 'true' : 'false';
+  if (caret) caret.textContent = nextState ? '▸' : '▾';
 
   for (let i = startIndex + 1; i < items.length; i += 1) {
     const item = items[i];

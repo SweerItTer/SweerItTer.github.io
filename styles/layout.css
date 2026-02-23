@@ -1,14 +1,13 @@
 ﻿.article-shell {
-  display: grid;
-  grid-template-columns: var(--toc-width) minmax(0, 1fr);
+  display: flex;
   gap: 24px;
-  align-items: start;
+  align-items: flex-start;
+  padding-left: 24px;
 }
 
 .article-shell.toc-collapsed {
-  grid-template-columns: var(--toc-collapsed-width) minmax(0, 1fr);
+  padding-left: 24px;
 }
-
 .article-toc {
   position: sticky;
   top: 24px;
@@ -16,14 +15,17 @@
   max-height: calc(100vh - 48px);
   overflow: auto;
   border: 1px solid var(--border-soft);
-  border-radius: 12px;
+  border-radius: 16px;
   padding: 16px;
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(255, 255, 255, 0.03);
+  width: var(--toc-width);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
 }
 
 .article-preview {
   max-width: var(--content-max-width);
   padding-right: var(--content-padding);
+  width: 100%;
 }
 
 .article-meta {
@@ -88,6 +90,10 @@
 
 .toc-item {
   margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
 }
 
 .toc-item.is-hidden {
@@ -126,6 +132,21 @@
   border-left: 3px solid #667eea;
 }
 
+.toc-caret {
+  border: none;
+  background: transparent;
+  color: var(--text-soft);
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.toc-caret:hover {
+  color: var(--text-strong);
+  background: rgba(255, 255, 255, 0.08);
+}
+
 .toc-toggle {
   border: 1px solid var(--border-soft);
   background: transparent;
@@ -149,6 +170,7 @@
 .article-shell.toc-collapsed .article-toc {
   padding: 8px;
   overflow: hidden;
+  width: var(--toc-collapsed-width);
 }
 
 .article-shell.toc-collapsed .toc-title,
@@ -163,15 +185,33 @@
 
 @media (max-width: 1024px) {
   .article-shell {
-    grid-template-columns: minmax(0, 1fr);
+    flex-direction: column;
+    padding-left: 0;
   }
 
   .article-toc {
     position: relative;
     max-height: none;
+    width: 100%;
   }
 
   .article-shell.toc-collapsed .article-toc {
     display: none;
   }
 }
+
+@media (min-width: 1200px) {
+  .article-toc {
+    position: fixed;
+    left: 24px;
+  }
+
+  .article-shell {
+    padding-left: calc(var(--toc-width) + 48px);
+  }
+
+  .article-shell.toc-collapsed {
+    padding-left: 48px;
+  }
+}
+
