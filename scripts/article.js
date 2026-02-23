@@ -469,19 +469,47 @@
         commentsContainer.className = 'giscus-container';
         articleContentEl.appendChild(commentsContainer);
 
+        // Giscus 配置 - 用户需要先配置 Giscus 并获取这些参数
+        // 如果这些参数为空，则不加载评论系统
+        const giscusConfig = {
+            repo: 'SweerItTer/SweerItTer.github.io',
+            repoId: '',
+            category: 'Announcements',
+            categoryId: ''
+        };
+
+        // 检查配置是否完整
+        if (!giscusConfig.repoId || !giscusConfig.categoryId) {
+            // 配置不完整，显示提示信息
+            commentsContainer.innerHTML = `
+                <div style="text-align: center; color: rgba(255, 255, 255, 0.5); padding: 20px;">
+                    <p>评论功能暂未启用</p>
+                    <p style="font-size: 0.85rem; margin-top: 8px;">如需启用评论，请先配置 Giscus</p>
+                </div>
+            `;
+            console.info('Giscus 评论系统未配置，跳过加载');
+            return;
+        }
+
         // 动态加载 Giscus
-        // 注意：用户需要先配置 Giscus 并获取 data-repo 等参数
-        // 这里提供一个基本的示例，用户需要替换为自己的配置
         const script = document.createElement('script');
         script.src = 'https://giscus.app/client.js';
         script.async = true;
         script.crossOrigin = 'anonymous';
+        script.onerror = () => {
+            console.error('Failed to load Giscus');
+            commentsContainer.innerHTML = `
+                <div style="text-align: center; color: rgba(255, 255, 255, 0.5); padding: 20px;">
+                    <p>评论功能加载失败</p>
+                </div>
+            `;
+        };
 
-        // Giscus 配置 - 用户需要根据实际情况修改
-        script.setAttribute('data-repo', 'SweerItTer/SweerItTer.github.io'); // 替换为你的仓库
-        script.setAttribute('data-repo-id', ''); // 从 Giscus 获取
-        script.setAttribute('data-category', 'Announcements'); // 替换为你的分类
-        script.setAttribute('data-category-id', ''); // 从 Giscus 获取
+        // Giscus 配置
+        script.setAttribute('data-repo', giscusConfig.repo);
+        script.setAttribute('data-repo-id', giscusConfig.repoId);
+        script.setAttribute('data-category', giscusConfig.category);
+        script.setAttribute('data-category-id', giscusConfig.categoryId);
         script.setAttribute('data-mapping', 'pathname');
         script.setAttribute('data-strict', '0');
         script.setAttribute('data-reactions-enabled', '1');
