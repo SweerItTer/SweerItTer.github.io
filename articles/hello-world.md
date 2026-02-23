@@ -1,22 +1,18 @@
 ﻿# Hello World
 
-娆㈣繋鏉ュ埌鎴戠殑涓汉鍗氬锛佽繖鏄垜鐨勭涓€绡囨枃绔犮€?
-## 鍏充簬鏈崥瀹?
-杩欐槸涓€涓熀浜?GitHub Pages 鐨勯潤鎬佸崥瀹㈢綉绔欙紝鍏锋湁浠ヤ笅鐗圭偣锛?
-- 缇庤鐨勬杩庨〉璁捐
-- 鍗曢〉搴旂敤锛圫PA锛夋灦鏋?- 鏀寔 Markdown 鍜?HTML 鏂囩珷鏍煎紡
-- 浠ｇ爜楂樹寒鍔熻兘
-- 鐩綍瀵艰埅
-- 鎼滅储鍜屾帓搴忓姛鑳?
-## 蹇€熷紑濮?
-### 娣诲姞鏂版枃绔?
-1. 鍦?`articles` 鏂囦欢澶逛腑鍒涘缓鏂扮殑 Markdown 鎴?HTML 鏂囦欢
-2. 提交并推送到 GitHub
-3. 页面会通过 GitHub API 自动识别文章
+欢迎来到我的个人博客！这是我的第一篇文章�?
+## 关于本博??
+这是一个基??GitHub Pages 的静态博客网站，具有以下特点�?
+- 美观的欢迎页设计
+- 单页应用（SPA）架�?- 支持 Markdown ??HTML 文章格式
+- 代码高亮功�??- 目录导�??- 搜索和排序功�?
+## 快速开�?
+### 添加新文??
+1. ??`articles` 文件夹中创建新的 Markdown ??HTML 文�??2. �ύ�����͵� GitHub
+3. ҳ���ͨ�� GitHub API �Զ�ʶ������
 
-### 绀轰緥浠ｇ爜
-
-涓嬮潰鏄竴涓畝鍗曠殑 JavaScript 绀轰緥锛?
+### 示例代�??
+下面是一个简单的 JavaScript 示例??
 ```javascript
 function greet(name) {
     console.log(`Hello, ${name}!`);
@@ -25,9 +21,8 @@ function greet(name) {
 greet('World');
 ```
 
-## 浠ｇ爜楂樹寒娴嬭瘯
-
-### Python 绀轰緥
+## 代码高亮测�??
+### Python 示例
 
 ```python
 def fibonacci(n):
@@ -38,7 +33,7 @@ def fibonacci(n):
 print(fibonacci(10))
 ```
 
-### CSS 绀轰緥
+### CSS 示例
 
 ```css
 .container {
@@ -49,6 +44,8 @@ print(fibonacci(10))
 }
 ```
 
-## 鎬荤粨
+## 总�??
+感谢访问我的博客！希望你喜欢这个设计�
 
-鎰熻阿璁块棶鎴戠殑鍗氬锛佸笇鏈涗綘鍠滄杩欎釜璁捐銆
+
+

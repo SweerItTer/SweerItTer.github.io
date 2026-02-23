@@ -657,6 +657,10 @@ body {
     z-index: 50;
 }
 
+.theme-menu[hidden] {
+    display: none;
+}
+
 .theme-option {
     background: transparent;
     color: var(--select-text);

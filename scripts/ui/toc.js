@@ -73,6 +73,9 @@ export function buildTOC(articleContentEl) {
   toggleBtn.addEventListener('click', () => {
     toggleTOCVisibility(shellEl);
   });
+
+  // ensure TOC is visible for new article load
+  shellEl.classList.remove('toc-collapsed');
 }
 
 function toggleSubtree(items, startIndex) {
