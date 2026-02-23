@@ -20,7 +20,7 @@ function initApp() {
   initNavigationButtons();
   initBlog();
   initArticle();
-  initRouter({ onBlog: loadBlog, onArticle: loadArticle });
+  initRouter({ blog: loadBlog, article: loadArticle });
 }
 
 function initNavigationButtons() {
