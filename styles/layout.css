@@ -50,6 +50,23 @@
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+.comments-section {
+  margin-top: 30px;
+}
+
+.comments-header {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-strong);
+  margin-bottom: 6px;
+}
+
+.comments-hint {
+  font-size: 0.85rem;
+  color: var(--text-soft);
+  margin-bottom: 12px;
+}
+
 .article-toc-header {
   display: flex;
   align-items: center;

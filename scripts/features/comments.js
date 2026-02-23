@@ -7,16 +7,31 @@ export function addComments(containerEl) {
     return;
   }
 
+  const section = document.createElement('div');
+  section.className = 'comments-section';
+
+  const header = document.createElement('div');
+  header.className = 'comments-header';
+  header.textContent = '评论';
+
+  const hint = document.createElement('div');
+  hint.className = 'comments-hint';
+  hint.textContent = '使用 GitHub 登录后可评论，点赞通过 reactions 完成。';
+
   const commentsContainer = document.createElement('div');
   commentsContainer.className = 'giscus-container';
-  containerEl.appendChild(commentsContainer);
+
+  section.appendChild(header);
+  section.appendChild(hint);
+  section.appendChild(commentsContainer);
+  containerEl.appendChild(section);
 
   const { giscus } = siteConfig;
   if (!giscus || !giscus.repoId || !giscus.categoryId) {
     commentsContainer.innerHTML = `
       <div style="text-align: center; color: rgba(255, 255, 255, 0.5); padding: 20px;">
         <p>评论功能暂未启用</p>
-        <p style="font-size: 0.85rem; margin-top: 8px;">如需启用评论，请先配置 Giscus</p>
+        <p style="font-size: 0.85rem; margin-top: 8px;">请在 config/site-config.js 中配置 Giscus 参数</p>
       </div>
     `;
     return;
