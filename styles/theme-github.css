@@ -1,28 +1,37 @@
-﻿[data-theme='github'] .article-body {
+﻿[data-theme='github'] .article-preview {
+  background: var(--md-bg);
+  color: var(--md-text);
+  border: 1px solid var(--md-border);
+  border-radius: 12px;
+  padding: 28px 32px;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.12);
+}
+
+[data-theme='github'] .article-content {
   color: var(--md-text);
 }
 
-[data-theme='github'] .article-body h1,
-[data-theme='github'] .article-body h2,
-[data-theme='github'] .article-body h3,
-[data-theme='github'] .article-body h4 {
+[data-theme='github'] .article-content h1,
+[data-theme='github'] .article-content h2,
+[data-theme='github'] .article-content h3,
+[data-theme='github'] .article-content h4 {
   color: var(--md-text);
 }
 
-[data-theme='github'] .article-body pre {
+[data-theme='github'] .article-content pre {
   background: var(--md-code-bg);
   border: 1px solid var(--md-border);
 }
 
-[data-theme='github'] .article-body code {
-  background: rgba(255, 255, 255, 0.08);
+[data-theme='github'] .article-content code {
+  background: rgba(9, 105, 218, 0.08);
 }
 
-[data-theme='github'] .article-body blockquote {
+[data-theme='github'] .article-content blockquote {
   border-left: 4px solid var(--md-accent);
   color: var(--md-muted);
 }
 
-[data-theme='github'] .article-body a {
+[data-theme='github'] .article-content a {
   color: var(--md-accent);
 }

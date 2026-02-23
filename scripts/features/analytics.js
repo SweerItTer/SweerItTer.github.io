@@ -31,4 +31,59 @@ export function renderAnalytics(containerEl) {
   } else {
     containerEl.appendChild(stats);
   }
+
+  lockValuesPerSession();
+}
+
+function lockValuesPerSession() {
+  const hashKey = window.location.hash || 'page';
+  const pvKey = `pv:${hashKey}`;
+  const uvKey = `uv:${hashKey}`;
+
+  const pvEl = document.getElementById('busuanzi_value_page_pv');
+  const uvEl = document.getElementById('busuanzi_value_page_uv');
+  if (!pvEl || !uvEl) return;
+
+  const cachedPv = sessionStorage.getItem(pvKey);
+  const cachedUv = sessionStorage.getItem(uvKey);
+
+  if (cachedPv && cachedUv) {
+    applyLockedValues(pvEl, uvEl, cachedPv, cachedUv);
+    return;
+  }
+
+  const observer = new MutationObserver(() => {
+    const currentPv = pvEl.textContent || '';
+    const currentUv = uvEl.textContent || '';
+
+    if (isValidNumber(currentPv) && isValidNumber(currentUv)) {
+      sessionStorage.setItem(pvKey, currentPv);
+      sessionStorage.setItem(uvKey, currentUv);
+      observer.disconnect();
+    }
+  });
+
+  observer.observe(pvEl, { childList: true, subtree: true });
+  observer.observe(uvEl, { childList: true, subtree: true });
+}
+
+function applyLockedValues(pvEl, uvEl, pvValue, uvValue) {
+  pvEl.textContent = pvValue;
+  uvEl.textContent = uvValue;
+
+  const restore = () => {
+    pvEl.textContent = pvValue;
+    uvEl.textContent = uvValue;
+  };
+
+  const observer = new MutationObserver(() => {
+    restore();
+  });
+
+  observer.observe(pvEl, { childList: true, subtree: true });
+  observer.observe(uvEl, { childList: true, subtree: true });
+}
+
+function isValidNumber(value) {
+  return value !== '-' && value !== '' && !Number.isNaN(Number(value));
 }
