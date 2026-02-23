@@ -73,11 +73,6 @@ async function loadArticleFile(filename) {
       renderHTML(content);
     }
 
-    buildTOC(articleContentEl);
-    renderAnalytics(articleContentEl);
-    addComments(articleContentEl);
-    initAnalytics();
-
   } catch (error) {
     console.error('Error loading article file:', error);
     showError('加载文章内容失败');
@@ -156,6 +151,11 @@ function renderMarkdown(content) {
     </div>
     <div class="article-body">${html}</div>
   `;
+
+  buildTOC(articleContentEl);
+  renderAnalytics(articleContentEl);
+  addComments(articleContentEl);
+  initAnalytics();
 }
 
 function renderHTML(content) {
@@ -177,6 +177,11 @@ function renderHTML(content) {
       hljs.highlightElement(block);
     });
   }
+
+  buildTOC(articleContentEl);
+  renderAnalytics(articleContentEl);
+  addComments(articleContentEl);
+  initAnalytics();
 }
 
 function showLoading() {
