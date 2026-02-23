@@ -25,7 +25,7 @@ export async function fetchArticlesIndex() {
 
 async function fetchGithubArticles(source) {
   const apiUrl = `https://api.github.com/repos/${source.owner}/${source.repo}/contents/${source.articlesPath}?ref=${source.branch}`;
-  const response = await fetch(apiUrl);
+  const response = await fetch(apiUrl, { cache: 'no-store' });
   if (!response.ok) {
     throw new Error('Failed to fetch articles list');
   }
@@ -57,7 +57,7 @@ function isArticleFile(filename) {
 }
 
 async function fetchArticleContent(filename) {
-  const response = await fetch(`articles/${filename}`);
+  const response = await fetch(`articles/${filename}`, { cache: 'no-store' });
   if (!response.ok) return '';
   return await response.text();
 }
@@ -129,7 +129,7 @@ function extractHtmlDescription(content) {
 
 async function fetchCommitDate(source, filePath) {
   const commitsUrl = `https://api.github.com/repos/${source.owner}/${source.repo}/commits?path=${filePath}&per_page=1`;
-  const response = await fetch(commitsUrl);
+  const response = await fetch(commitsUrl, { cache: 'no-store' });
   if (!response.ok) {
     throw new Error('Failed to fetch commit date');
   }
