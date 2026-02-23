@@ -54,7 +54,8 @@ function initWelcomePage() {
     lastParticleTime: 0,
     particlePool: [],
     maxParticles: 15,
-    isAnimating: true
+    isAnimating: true,
+    rafId: null
   };
 
   initStyles();
@@ -186,12 +187,15 @@ function initEventListeners(container, mainTitle, gradientCircles, floatingShape
     state.isAnimating = !document.hidden;
     if (state.isAnimating) {
       startMainAnimationLoop(gradientCircles, state);
+    } else if (state.rafId) {
+      cancelAnimationFrame(state.rafId);
+      state.rafId = null;
     }
   });
 }
 
 function startMainAnimationLoop(gradientCircles, state) {
-  if (!state.isAnimating) return;
+  if (!state.isAnimating || state.rafId) return;
 
   function animate() {
     if (!state.isAnimating) return;
@@ -203,10 +207,10 @@ function startMainAnimationLoop(gradientCircles, state) {
       circle.style.transform = `translate(${state.currentX}px, ${state.currentY}px)`;
     });
 
-    requestAnimationFrame(animate);
+    state.rafId = requestAnimationFrame(animate);
   }
 
-  requestAnimationFrame(animate);
+  state.rafId = requestAnimationFrame(animate);
 }
 
 function createRipple(x, y) {
