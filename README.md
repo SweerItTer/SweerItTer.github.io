@@ -227,6 +227,12 @@ SweerItTer.github.io/
 
 ### Q: 文章不显示？
 
+## Theme and Analytics (Added 2026-02-23)
+- Theme switcher: Article header includes a theme dropdown (GitHub / Claude).
+- Giscus comments: Configure repoId/categoryId in `config/site-config.js`.
+- Analytics: busuanzi enabled by default (display locked per session on the same article).
+- Structure: ES Modules under `scripts/`, themes in `styles/`.
+
 A: 检查以下几点：
 - 文件是否在 `articles` 文件夹中
 - `articles.json` 中是否正确配置了文章信息

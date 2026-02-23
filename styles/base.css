@@ -18,9 +18,9 @@
   --md-border: #d0d7de;
   --md-code-bg: #f0f2f4;
   --md-accent: #0969da;
-  --select-bg: #f6f8fa;
-  --select-text: #24292f;
-  --select-border: #d0d7de;
+  --select-bg: rgba(255, 255, 255, 0.05);
+  --select-text: rgba(255, 255, 255, 0.9);
+  --select-border: rgba(255, 255, 255, 0.2);
 }
 
 [data-theme='claude'] {
