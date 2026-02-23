@@ -1,0 +1,28 @@
+﻿[data-theme='claude'] .article-body {
+  color: var(--md-text);
+}
+
+[data-theme='claude'] .article-body h1,
+[data-theme='claude'] .article-body h2,
+[data-theme='claude'] .article-body h3,
+[data-theme='claude'] .article-body h4 {
+  color: var(--md-text);
+}
+
+[data-theme='claude'] .article-body pre {
+  background: var(--md-code-bg);
+  border: 1px solid var(--md-border);
+}
+
+[data-theme='claude'] .article-body code {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme='claude'] .article-body blockquote {
+  border-left: 4px solid var(--md-accent);
+  color: var(--md-muted);
+}
+
+[data-theme='claude'] .article-body a {
+  color: var(--md-accent);
+}
