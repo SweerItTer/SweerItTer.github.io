@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>欢迎 - Welcome</title>
+    <title>娆㈣繋 - Welcome</title>
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/base.css">
     <link rel="stylesheet" href="styles/layout.css">
@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="styles/theme-claude.css">
 </head>
 <body>
-    <!-- 欢迎页容器 -->
+    <!-- 娆㈣繋椤靛鍣?-->
     <div id="welcome-container" class="page-container active">
         <div class="container">
             <div class="background-layer">
@@ -22,7 +22,7 @@
             </div>
 
             <main class="content">
-                <h1 class="main-title" data-text="欢迎">欢迎</h1>
+                <h1 class="main-title" data-text="娆㈣繋">娆㈣繋</h1>
                 <p class="subtitle">Welcome to the Future</p>
                 <div class="decorative-line"></div>
             </main>
@@ -35,7 +35,7 @@
         </div>
     </div>
 
-    <!-- 博客列表容器 -->
+    <!-- 鍗氬鍒楄〃瀹瑰櫒 -->
     <div id="blog-container" class="page-container hidden">
         <div class="blog-wrapper">
             <header class="blog-header">
@@ -43,9 +43,9 @@
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M19 12H5M12 19l-7-7 7-7"/>
                     </svg>
-                    返回
+                    杩斿洖
                 </button>
-                <h1 class="blog-title">博客</h1>
+                <h1 class="blog-title">鍗氬</h1>
             </header>
 
             <div class="blog-controls">
@@ -54,7 +54,7 @@
                         <circle cx="11" cy="11" r="8"/>
                         <path d="M21 21l-4.35-4.35"/>
                     </svg>
-                    <input type="text" id="search-input" placeholder="搜索文章..." />
+                    <input type="text" id="search-input" placeholder="鎼滅储鏂囩珷..." />
                 </div>
                 <div class="sort-buttons">
                     <button class="sort-btn active" data-sort="alpha">按字母</button>
@@ -63,12 +63,12 @@
             </div>
 
             <div id="articles-list" class="articles-list">
-                <!-- 文章列表将在这里动态渲染 -->
+                <!-- 鏂囩珷鍒楄〃灏嗗湪杩欓噷鍔ㄦ€佹覆鏌?-->
             </div>
         </div>
     </div>
 
-    <!-- 文章详情容器 -->
+    <!-- 鏂囩珷璇︽儏瀹瑰櫒 -->
     <div id="article-container" class="page-container hidden">
         <div class="article-wrapper">
             <header class="article-header">
@@ -76,7 +76,7 @@
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M19 12H5M12 19l-7-7 7-7"/>
                     </svg>
-                    返回列表
+                    杩斿洖鍒楄〃
                 </button>
                 <div class="article-toolbar">
                     <label class="theme-label">主题</label>
@@ -90,13 +90,21 @@
                 </div>
             </header>
 
-            <article id="article-content" class="article-content">
-                <!-- 文章内容将在这里动态渲染 -->
-            </article>
+            <div class="article-shell" id="article-shell">
+                <aside class="article-toc" id="article-toc">
+                    <!-- 目录由脚本生成 -->
+                </aside>
+                <article id="article-content" class="article-content article-preview">
+                    <!-- 文章内容将在这里动态渲染 -->
+                </article>
+            </div>
         </div>
     </div>
 
-    <!-- 引入脚本 -->
+    <!-- 寮曞叆鑴氭湰 -->
     <script type="module" src="scripts/main.js"></script>
 </body>
 </html>
+
+
+
