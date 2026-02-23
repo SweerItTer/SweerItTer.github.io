@@ -4,6 +4,7 @@
 
 import { buildTOC } from './ui/toc.js';
 import { addComments } from './features/comments.js';
+import { initAnalytics, renderAnalytics } from './features/analytics.js';
 
 let initialized = false;
 let currentArticleId = null;
@@ -77,7 +78,9 @@ async function loadArticleFile(filename) {
     }
 
     buildTOC(articleContentEl);
+    renderAnalytics(articleContentEl);
     addComments(articleContentEl);
+    initAnalytics();
 
   } catch (error) {
     console.error('Error loading article file:', error);

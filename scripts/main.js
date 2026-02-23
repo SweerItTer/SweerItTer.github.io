@@ -5,6 +5,7 @@
 import { initRouter, navigate } from './router.js';
 import { initBlog, loadBlog } from './blog.js';
 import { initArticle, loadArticle } from './article.js';
+import { initThemeSwitch } from './ui/theme-switch.js';
 
 // 等待 DOM 加载完成
 if (document.readyState === 'loading') {
@@ -20,6 +21,7 @@ function initApp() {
   initNavigationButtons();
   initBlog();
   initArticle();
+  initThemeSwitch(document.getElementById('theme-select'));
   initRouter({ blog: loadBlog, article: loadArticle });
 }
 
