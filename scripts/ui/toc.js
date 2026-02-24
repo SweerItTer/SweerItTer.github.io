@@ -1,6 +1,9 @@
 ﻿import { appState } from '../core/state.js';
 
 const TOC_HEADING_SELECTOR = '.article-body h2, .article-body h3, .article-body h4';
+const ACTIVE_TOP_OFFSET = 140;
+const CLICK_ACTIVE_LOCK_MS = 900;
+let disposeScrollSpy = null;
 
 export function buildTOC(articleContentEl) {
   const tocEl = document.getElementById('article-toc');
@@ -61,6 +64,7 @@ export function buildTOC(articleContentEl) {
   shellEl.classList.remove('toc-collapsed');
 
   const items = [];
+  let scrollSpyController = null;
 
   headings.forEach((heading, index) => {
     const level = Number(heading.tagName.replace('H', '')) || 2;
@@ -77,6 +81,10 @@ export function buildTOC(articleContentEl) {
     link.className = 'toc-link';
     link.textContent = heading.textContent || `Section ${index + 1}`;
     link.addEventListener('click', () => {
+      if (scrollSpyController) {
+        scrollSpyController.markManual(heading.id);
+      }
+      setActiveByHeadingId(items, heading.id, tocEl);
       startTocChaseMotion(tocEl);
       heading.scrollIntoView({ behavior: 'smooth', block: 'start' });
       setTimeout(() => ensureInView(tocEl, link), 220);
@@ -89,7 +97,12 @@ export function buildTOC(articleContentEl) {
   });
 
   addCaretControls(items);
-  initScrollSpy(items, tocEl);
+  if (disposeScrollSpy) {
+    disposeScrollSpy();
+    disposeScrollSpy = null;
+  }
+  scrollSpyController = initScrollSpy(items, tocEl);
+  disposeScrollSpy = scrollSpyController.dispose;
 
   toggleBtn.addEventListener('click', () => {
     toggleTOCVisibility(shellEl);
@@ -158,27 +171,74 @@ function toggleSubtree(items, startIndex, caret) {
 }
 
 function initScrollSpy(items, tocEl) {
-  const observerOptions = {
-    rootMargin: '-100px 0px -70% 0px',
-    threshold: 0
+  const articleContainer = document.getElementById('article-container');
+  const scrollTarget = articleContainer || window;
+  let rafId = 0;
+  let manualHeadingId = '';
+  let manualUntil = 0;
+
+  const updateActive = () => {
+    const now = Date.now();
+    if (manualHeadingId && now < manualUntil) {
+      setActiveByHeadingId(items, manualHeadingId, tocEl);
+      return;
+    }
+
+    manualHeadingId = '';
+    manualUntil = 0;
+
+    let active = items[0];
+    for (const item of items) {
+      const top = item.heading.getBoundingClientRect().top;
+      if (top <= ACTIVE_TOP_OFFSET) {
+        active = item;
+      } else {
+        break;
+      }
+    }
+
+    if (active) {
+      setActiveByHeadingId(items, active.heading.id, tocEl);
+    }
   };
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const id = entry.target.id;
-        items.forEach(item => {
-          item.link.classList.remove('active');
-          if (item.heading.id === id) {
-            item.link.classList.add('active');
-            ensureInView(tocEl, item.link);
-          }
-        });
-      }
+  const onTick = () => {
+    if (rafId) return;
+    rafId = requestAnimationFrame(() => {
+      rafId = 0;
+      updateActive();
     });
-  }, observerOptions);
+  };
 
-  items.forEach(item => observer.observe(item.heading));
+  scrollTarget.addEventListener('scroll', onTick, { passive: true });
+  window.addEventListener('resize', onTick);
+  updateActive();
+
+  return {
+    markManual(headingId) {
+      manualHeadingId = headingId;
+      manualUntil = Date.now() + CLICK_ACTIVE_LOCK_MS;
+      updateActive();
+    },
+    dispose() {
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+        rafId = 0;
+      }
+      scrollTarget.removeEventListener('scroll', onTick);
+      window.removeEventListener('resize', onTick);
+    }
+  };
+}
+
+function setActiveByHeadingId(items, headingId, tocEl) {
+  items.forEach((item) => {
+    const isActive = item.heading.id === headingId;
+    item.link.classList.toggle('active', isActive);
+    if (isActive) {
+      ensureInView(tocEl, item.link);
+    }
+  });
 }
 
 function ensureInView(container, element) {

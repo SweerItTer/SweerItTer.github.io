@@ -1,4 +1,4 @@
-import { initArticle, loadArticle } from '../article.js';
+import { initArticle, loadArticle, loadDocumentByPath } from '../article.js';
 import { initThemeSwitch } from '../ui/theme-switch.js';
 import { fetchArticlesIndex } from '../features/articles-source.js';
 
@@ -21,6 +21,12 @@ async function initPage() {
 
   const params = new URLSearchParams(window.location.search);
   const articleId = params.get('id');
+  const docPath = params.get('doc');
+
+  if (docPath) {
+    await loadDocumentByPath(docPath);
+    return;
+  }
 
   if (articleId) {
     await loadArticle(articleId);

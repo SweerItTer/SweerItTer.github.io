@@ -6,5 +6,13 @@
     "date": "2026-02-23",
     "description": "欢迎来到我的个人博客！这是我的第一篇文章。",
     "tags": []
+  }, 
+  {
+    "id": "_README",
+    "file": "../_README.md",
+    "title": "README",
+    "date": "2026-02-24",
+    "description": "仓库介绍和指南",
+    "tags": []
   }
 ]
