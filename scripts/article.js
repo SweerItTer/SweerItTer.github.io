@@ -1,581 +1,533 @@
-// ============================================
+﻿// ============================================
 // 文章渲染管理
 // ============================================
 
-(function() {
-    'use strict';
-
-    // 当前文章 ID
-    let currentArticleId = null;
-    let currentArticle = null;
-
-    // DOM 元素
-    let articleContentEl = null;
-
-    // ============================================
-    // 初始化文章页面
-    // ============================================
-    function initArticle() {
-        articleContentEl = document.getElementById('article-content');
-
-        if (!articleContentEl) {
-            console.error('Article content element not found');
-            return;
-        }
-
-        // 初始化 Markdown 解析器和代码高亮
-        initMarkdownParser();
-        initCodeHighlight();
-
-        // 加载目录导航样式
-        initTOCStyles();
-    }
-
-    // ============================================
-    // 加载文章
-    // ============================================
-    async function loadArticle(articleId) {
-        currentArticleId = articleId;
-
-        // 显示加载状态
-        showLoading();
-
-        try {
-            // 获取文章列表以找到对应的文件
-            const response = await fetch('articles/articles.json');
-            if (!response.ok) {
-                throw new Error('Failed to load articles.json');
-            }
-
-            const data = await response.json();
-            const article = data.articles.find(a => a.id === articleId);
-
-            if (!article) {
-                showError('文章不存在');
-                return;
-            }
-
-            currentArticle = article;
-
-            // 加载文章文件
-            await loadArticleFile(article.file);
-
-        } catch (error) {
-            console.error('Error loading article:', error);
-            showError('加载文章失败，请稍后重试');
-        }
-    }
-
-    // ============================================
-    // 加载文章文件
-    // ============================================
-    async function loadArticleFile(filename) {
-        try {
-            const response = await fetch(`articles/${filename}`);
-
-            if (!response.ok) {
-                throw new Error(`Failed to load ${filename}`);
-            }
-
-            const content = await response.text();
-            const fileExtension = filename.split('.').pop().toLowerCase();
-
-            // 根据文件类型渲染内容
-            if (fileExtension === 'md') {
-                renderMarkdown(content);
-            } else if (fileExtension === 'html') {
-                renderHTML(content);
-            } else {
-                // 默认当作 HTML 处理
-                renderHTML(content);
-            }
-
-            // 生成目录导航
-            generateTOC();
-
-            // 添加评论系统
-            addComments();
-
-        } catch (error) {
-            console.error('Error loading article file:', error);
-            showError('加载文章内容失败');
-        }
-    }
-
-    // ============================================
-    // 初始化 Markdown 解析器
-    // ============================================
-    function initMarkdownParser() {
-        // 如果 marked.js 未加载，动态加载
-        if (typeof marked === 'undefined') {
-            const script = document.createElement('script');
-            script.src = 'https://cdn.jsdelivr.net/npm/marked@12.0.0/marked.min.js';
-            script.async = true;
-            script.onload = () => {
-                console.log('Marked.js loaded successfully');
-            };
-            script.onerror = () => {
-                console.error('Failed to load Marked.js');
-            };
-            document.head.appendChild(script);
-        }
-    }
-
-    // ============================================
-    // 初始化代码高亮
-    // ============================================
-    function initCodeHighlight() {
-        // 如果 highlight.js 未加载，动态加载
-        if (typeof hljs === 'undefined') {
-            // 加载核心库
-            const coreScript = document.createElement('script');
-            coreScript.src = 'https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/core.min.js';
-            coreScript.async = true;
-            document.head.appendChild(coreScript);
-
-            // 加载常用语言支持
-            const languages = ['javascript', 'python', 'java', 'cpp', 'html', 'css', 'json', 'bash', 'sql', 'typescript'];
-            languages.forEach(lang => {
-                const langScript = document.createElement('script');
-                langScript.src = `https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/${lang}.min.js`;
-                langScript.async = true;
-                document.head.appendChild(langScript);
-            });
-
-            // 加载样式
-            const styleLink = document.createElement('link');
-            styleLink.rel = 'stylesheet';
-            styleLink.href = 'https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css';
-            document.head.appendChild(styleLink);
-
-            console.log('Highlight.js loaded successfully');
-        }
-    }
-
-    // ============================================
-    // 渲染 Markdown 内容
-    // ============================================
-    function renderMarkdown(content) {
-        if (typeof marked === 'undefined') {
-            // 等待 marked.js 加载
-            setTimeout(() => {
-                if (typeof marked !== 'undefined') {
-                    renderMarkdown(content);
-                } else {
-                    showError('Markdown 解析器加载失败');
-                }
-            }, 100);
-            return;
-        }
-
-        // 配置 marked
-        marked.setOptions({
-            breaks: true,
-            gfm: true,
-            highlight: function(code, lang) {
-                if (typeof hljs !== 'undefined' && lang && hljs.getLanguage(lang)) {
-                    try {
-                        return hljs.highlight(code, { language: lang }).value;
-                    } catch (error) {
-                        console.error('Highlight error:', error);
-                    }
-                }
-                return code;
-            }
-        });
-
-        // 渲染 Markdown
-        const html = marked.parse(content);
-
-        // 显示文章内容
-        articleContentEl.innerHTML = `
-            <h1>${escapeHtml(currentArticle.title)}</h1>
-            <div class="article-meta">
-                <span class="article-date">${formatDate(currentArticle.date)}</span>
-                ${currentArticle.tags && currentArticle.tags.length > 0 ? `
-                    <span class="article-tags">
-                        ${currentArticle.tags.map(tag => `<span class="article-tag">${tag}</span>`).join('')}
-                    </span>
-                ` : ''}
-            </div>
-            <div class="article-body">${html}</div>
-        `;
-    }
-
-    // ============================================
-    // 渲染 HTML 内容
-    // ============================================
-    function renderHTML(content) {
-        // 显示文章内容
-        articleContentEl.innerHTML = `
-            <h1>${escapeHtml(currentArticle.title)}</h1>
-            <div class="article-meta">
-                <span class="article-date">${formatDate(currentArticle.date)}</span>
-                ${currentArticle.tags && currentArticle.tags.length > 0 ? `
-                    <span class="article-tags">
-                        ${currentArticle.tags.map(tag => `<span class="article-tag">${tag}</span>`).join('')}
-                    </span>
-                ` : ''}
-            </div>
-            <div class="article-body">${content}</div>
-        `;
-
-        // 应用代码高亮
-        if (typeof hljs !== 'undefined') {
-            articleContentEl.querySelectorAll('pre code').forEach((block) => {
-                hljs.highlightElement(block);
-            });
-        }
-    }
-
-    // ============================================
-    // 生成目录导航
-    // ============================================
-    function generateTOC() {
-        // 获取文章内容中的标题
-        const headings = articleContentEl.querySelectorAll('h2, h3');
-
-        if (headings.length === 0) return;
-
-        // 创建目录容器
-        const tocContainer = document.createElement('div');
-        tocContainer.className = 'toc-container';
-
-        const tocTitle = document.createElement('div');
-        tocTitle.className = 'toc-title';
-        tocTitle.textContent = '目录';
-        tocContainer.appendChild(tocTitle);
-
-        const tocList = document.createElement('ul');
-        tocList.className = 'toc-list';
-        tocContainer.appendChild(tocList);
-
-        // 生成目录项
-        headings.forEach((heading, index) => {
-            const id = `heading-${index}`;
-            heading.id = id;
-
-            const tocItem = document.createElement('li');
-            tocItem.className = `toc-item toc-level-${heading.tagName.toLowerCase()}`;
-
-            const tocLink = document.createElement('a');
-            tocLink.href = `#${id}`;
-            tocLink.textContent = heading.textContent;
-            tocLink.className = 'toc-link';
-
-            tocItem.appendChild(tocLink);
-            tocList.appendChild(tocItem);
-
-            // 点击目录项滚动到对应位置
-            tocLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                heading.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            });
-        });
-
-        // 将目录插入到文章内容前
-        articleContentEl.insertBefore(tocContainer, articleContentEl.firstChild.nextSibling);
-
-        // 添加滚动监听，高亮当前目录项
-        initTOCScrollSpy();
-    }
-
-    // ============================================
-    // 初始化目录滚动监听
-    // ============================================
-    function initTOCScrollSpy() {
-        const headings = articleContentEl.querySelectorAll('h2, h3');
-        const tocLinks = articleContentEl.querySelectorAll('.toc-link');
-
-        if (headings.length === 0 || tocLinks.length === 0) return;
-
-        const observerOptions = {
-            rootMargin: '-100px 0px -70% 0px',
-            threshold: 0
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const id = entry.target.id;
-                    tocLinks.forEach(link => {
-                        link.classList.remove('active');
-                        if (link.getAttribute('href') === `#${id}`) {
-                            link.classList.add('active');
-                        }
-                    });
-                }
-            });
-        }, observerOptions);
-
-        headings.forEach(heading => observer.observe(heading));
-    }
-
-    // ============================================
-    // 初始化目录样式
-    // ============================================
-    function initTOCStyles() {
-        const style = document.createElement('style');
-        style.textContent = `
-            .toc-container {
-                background: rgba(255, 255, 255, 0.03);
-                border: 1px solid rgba(255, 255, 255, 0.08);
-                border-radius: 12px;
-                padding: 20px;
-                margin-bottom: 30px;
-            }
-
-            .toc-title {
-                font-size: 1.2rem;
-                font-weight: 600;
-                color: #fff;
-                margin-bottom: 16px;
-            }
-
-            .toc-list {
-                list-style: none;
-                margin: 0;
-                padding: 0;
-            }
-
-            .toc-item {
-                margin-bottom: 8px;
-            }
-
-            .toc-level-h3 {
-                padding-left: 20px;
-            }
-
-            .toc-link {
-                display: block;
-                color: rgba(255, 255, 255, 0.7);
-                text-decoration: none;
-                padding: 6px 12px;
-                border-radius: 6px;
-                transition: all 0.3s ease;
-                font-size: 0.95rem;
-            }
-
-            .toc-link:hover {
-                color: #fff;
-                background: rgba(255, 255, 255, 0.08);
-            }
-
-            .toc-link.active {
-                color: #fff;
-                background: rgba(102, 126, 234, 0.2);
-                border-left: 3px solid #667eea;
-            }
-
-            .article-meta {
-                display: flex;
-                align-items: center;
-                gap: 16px;
-                margin: 20px 0 30px;
-                padding-bottom: 20px;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            }
-
-            .article-date {
-                color: rgba(255, 255, 255, 0.6);
-                font-size: 0.9rem;
-            }
-
-            .article-tags {
-                display: flex;
-                gap: 8px;
-                flex-wrap: wrap;
-            }
-
-            .article-body {
-                line-height: 1.8;
-            }
-
-            .article-body h2,
-            .article-body h3 {
-                margin-top: 2em;
-                margin-bottom: 1em;
-                color: #fff;
-            }
-
-            .article-body h2 {
-                font-size: 2rem;
-            }
-
-            .article-body h3 {
-                font-size: 1.5rem;
-            }
-
-            .article-body p {
-                margin-bottom: 1.5em;
-            }
-
-            .article-body a {
-                color: #667eea;
-                text-decoration: none;
-                transition: color 0.3s ease;
-            }
-
-            .article-body a:hover {
-                color: #f093fb;
-            }
-
-            .article-body pre {
-                background: rgba(0, 0, 0, 0.3);
-                padding: 20px;
-                border-radius: 8px;
-                overflow-x: auto;
-                margin-bottom: 1.5em;
-            }
-
-            .article-body code {
-                font-family: 'Consolas', 'Monaco', monospace;
-                font-size: 0.9em;
-            }
-
-            .article-body pre code {
-                background: none;
-            }
-
-            .article-body blockquote {
-                border-left: 4px solid #667eea;
-                padding-left: 20px;
-                margin: 1.5em 0;
-                color: rgba(255, 255, 255, 0.7);
-                font-style: italic;
-            }
-
-            /* Giscus 评论容器 */
-            .giscus-container {
-                margin-top: 40px;
-                padding-top: 40px;
-                border-top: 1px solid rgba(255, 255, 255, 0.1);
-            }
-        `;
-        document.head.appendChild(style);
-    }
-
-    // ============================================
-    // 添加评论系统
-    // ============================================
-    function addComments() {
-        // 检查是否已经有 Giscus 脚本
-        if (document.querySelector('.giscus-container')) {
-            return;
-        }
-
-        // 创建评论容器
-        const commentsContainer = document.createElement('div');
-        commentsContainer.className = 'giscus-container';
-        articleContentEl.appendChild(commentsContainer);
-
-        // Giscus 配置 - 用户需要先配置 Giscus 并获取这些参数
-        // 如果这些参数为空，则不加载评论系统
-        const giscusConfig = {
-            repo: 'SweerItTer/SweerItTer.github.io',
-            repoId: '',
-            category: 'Announcements',
-            categoryId: ''
-        };
-
-        // 检查配置是否完整
-        if (!giscusConfig.repoId || !giscusConfig.categoryId) {
-            // 配置不完整，显示提示信息
-            commentsContainer.innerHTML = `
-                <div style="text-align: center; color: rgba(255, 255, 255, 0.5); padding: 20px;">
-                    <p>评论功能暂未启用</p>
-                    <p style="font-size: 0.85rem; margin-top: 8px;">如需启用评论，请先配置 Giscus</p>
-                </div>
-            `;
-            console.info('Giscus 评论系统未配置，跳过加载');
-            return;
-        }
-
-        // 动态加载 Giscus
-        const script = document.createElement('script');
-        script.src = 'https://giscus.app/client.js';
-        script.async = true;
-        script.crossOrigin = 'anonymous';
-        script.onerror = () => {
-            console.error('Failed to load Giscus');
-            commentsContainer.innerHTML = `
-                <div style="text-align: center; color: rgba(255, 255, 255, 0.5); padding: 20px;">
-                    <p>评论功能加载失败</p>
-                </div>
-            `;
-        };
-
-        // Giscus 配置
-        script.setAttribute('data-repo', giscusConfig.repo);
-        script.setAttribute('data-repo-id', giscusConfig.repoId);
-        script.setAttribute('data-category', giscusConfig.category);
-        script.setAttribute('data-category-id', giscusConfig.categoryId);
-        script.setAttribute('data-mapping', 'pathname');
-        script.setAttribute('data-strict', '0');
-        script.setAttribute('data-reactions-enabled', '1');
-        script.setAttribute('data-emit-metadata', '0');
-        script.setAttribute('data-input-position', 'bottom');
-        script.setAttribute('data-theme', 'dark');
-        script.setAttribute('data-lang', 'zh-CN');
-
-        commentsContainer.appendChild(script);
-    }
-
-    // ============================================
-    // 显示加载状态
-    // ============================================
-    function showLoading() {
-        articleContentEl.innerHTML = `
-            <div class="loading-state">
-                <p>加载中...</p>
-            </div>
-        `;
-    }
-
-    // ============================================
-    // 显示错误信息
-    // ============================================
-    function showError(message) {
-        articleContentEl.innerHTML = `
-            <div class="error-state">
-                <h3>出错了</h3>
-                <p>${message}</p>
-            </div>
-        `;
-    }
-
-    // ============================================
-    // 格式化日期
-    // ============================================
-    function formatDate(dateString) {
-        if (!dateString) return '未知日期';
-
-        try {
-            const date = new Date(dateString);
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-
-            return `${year}-${month}-${day}`;
-        } catch (error) {
-            return dateString;
-        }
-    }
-
-    // ============================================
-    // HTML 转义（防止 XSS）
-    // ============================================
-    function escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
-
-    // ============================================
-    // 暴露公共 API
-    // ============================================
-    window.loadArticle = loadArticle;
-
-    // 初始化文章模块
+import { buildTOC } from './ui/toc.js';
+import { addComments } from './features/comments.js';
+import { initAnalytics, renderAnalytics } from './features/analytics.js';
+import { fetchArticlesIndex } from './features/articles-source.js';
+
+let initialized = false;
+let currentArticleId = null;
+let currentArticle = null;
+let articleContentEl = null;
+let articleHeadlineEl = null;
+let articleCommentsHostEl = null;
+let highlightThemeBound = false;
+let currentSourcePath = '';
+
+export function initArticle() {
+  if (initialized) return;
+
+  articleContentEl = document.getElementById('article-content');
+  articleHeadlineEl = document.getElementById('article-headline');
+  articleCommentsHostEl = document.getElementById('article-comments-host');
+
+  if (!articleContentEl || !articleHeadlineEl || !articleCommentsHostEl) {
+    console.error('Article content element not found');
+    return;
+  }
+
+  initMarkdownParser();
+  initCodeHighlight();
+
+  window.addEventListener('resize', () => {
+    updateTocOffset();
+  });
+
+  initialized = true;
+}
+
+export async function loadArticle(articleId) {
+  if (!initialized) {
     initArticle();
-})();
+  }
+
+  currentArticleId = articleId;
+  showLoading();
+
+  try {
+    const list = await fetchArticlesIndex();
+    const article = list.find(a => a.id === articleId);
+
+    if (!article) {
+      showError('文章不存在');
+      return;
+    }
+
+    currentArticle = article;
+    await loadArticleFile(article.file);
+
+  } catch (error) {
+    console.error('Error loading article:', error);
+    showError('加载文章失败，请稍后重试');
+  }
+}
+
+async function loadArticleFile(filename) {
+  try {
+    const sourcePath = `articles/${filename}`;
+    const response = await fetch(sourcePath, { cache: 'no-store' });
+
+    if (!response.ok) {
+      throw new Error(`Failed to load ${filename}`);
+    }
+
+    const content = await response.text();
+    const fileExtension = filename.split('.').pop().toLowerCase();
+    currentSourcePath = sourcePath;
+
+    if (fileExtension === 'md') {
+      renderMarkdown(content, sourcePath);
+    } else if (fileExtension === 'html') {
+      renderHTML(content, sourcePath);
+    } else {
+      renderHTML(content, sourcePath);
+    }
+
+  } catch (error) {
+    console.error('Error loading article file:', error);
+    showError('加载文章内容失败');
+  }
+}
+
+export async function loadDocumentByPath(docPath) {
+  const normalizedPath = normalizeDocPath(docPath);
+  if (!normalizedPath) {
+    showError('文档路径无效');
+    throw new Error('Invalid document path');
+  }
+
+  showLoading();
+  currentArticleId = '';
+
+  try {
+    const response = await fetch(normalizedPath, { cache: 'no-store' });
+    if (!response.ok) {
+      throw new Error(`Failed to load ${normalizedPath}`);
+    }
+
+    const content = await response.text();
+    const fileExtension = normalizedPath.split('.').pop().toLowerCase();
+    const meta = extractDocMeta(normalizedPath, content);
+
+    currentArticle = {
+      id: '',
+      title: meta.title,
+      date: meta.date || '',
+      tags: meta.tags || []
+    };
+    currentSourcePath = normalizedPath;
+
+    if (fileExtension === 'md') {
+      renderMarkdown(content, normalizedPath);
+    } else {
+      renderHTML(content, normalizedPath);
+    }
+    return true;
+  } catch (error) {
+    console.error('Error loading document by path:', error);
+    showError('加载文档失败，请确认链接路径');
+    throw error;
+  }
+}
+
+function initMarkdownParser() {
+  if (typeof marked === 'undefined') {
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/marked@12.0.0/marked.min.js';
+    script.async = true;
+    script.onload = () => {
+      console.log('Marked.js loaded successfully');
+    };
+    script.onerror = () => {
+      console.error('Failed to load Marked.js');
+    };
+    document.head.appendChild(script);
+  }
+}
+
+function initCodeHighlight() {
+  ensureHighlightThemeLink();
+
+  if (typeof hljs === 'undefined') {
+    const bundleScript = document.createElement('script');
+    bundleScript.src = 'https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/highlight.min.js';
+    bundleScript.async = true;
+    document.head.appendChild(bundleScript);
+  }
+
+  if (!highlightThemeBound) {
+    window.addEventListener('appearancechange', () => {
+      const themeLink = document.getElementById('hljs-theme');
+      if (!themeLink) return;
+      themeLink.href = getHighlightThemeHref();
+    });
+    highlightThemeBound = true;
+  }
+}
+
+function renderMarkdown(content, sourcePath) {
+  if (typeof marked === 'undefined') {
+    setTimeout(() => {
+      if (typeof marked !== 'undefined') {
+        renderMarkdown(content, sourcePath);
+      } else {
+        showError('Markdown 解析器加载失败');
+      }
+    }, 100);
+    return;
+  }
+
+  marked.setOptions({
+    breaks: true,
+    gfm: true,
+    highlight: function(code, lang) {
+      if (typeof hljs !== 'undefined' && lang && hljs.getLanguage(lang)) {
+        try {
+          return hljs.highlight(code, { language: lang }).value;
+        } catch (error) {
+          console.error('Highlight error:', error);
+        }
+      }
+      return code;
+    }
+  });
+
+  const markdownWithoutFrontMatter = stripFrontMatter(content);
+  const html = marked.parse(markdownWithoutFrontMatter);
+
+  renderArticleHeadline();
+  articleContentEl.innerHTML = `
+    <div class="article-body">${html}</div>
+  `;
+
+  enhanceArticleLinks(sourcePath);
+  buildTOC(articleContentEl);
+  renderAnalytics(articleHeadlineEl);
+  addComments(articleCommentsHostEl);
+  initAnalytics();
+  updateTocOffset();
+}
+
+function renderHTML(content, sourcePath) {
+  renderArticleHeadline();
+  articleContentEl.innerHTML = `
+    <div class="article-body">${content}</div>
+  `;
+
+  if (typeof hljs !== 'undefined') {
+    articleContentEl.querySelectorAll('pre code').forEach((block) => {
+      hljs.highlightElement(block);
+    });
+  }
+
+  enhanceArticleLinks(sourcePath);
+  buildTOC(articleContentEl);
+  renderAnalytics(articleHeadlineEl);
+  addComments(articleCommentsHostEl);
+  initAnalytics();
+  updateTocOffset();
+}
+
+function renderArticleHeadline() {
+  if (!articleHeadlineEl || !currentArticle) return;
+
+  articleHeadlineEl.innerHTML = `
+    <h1 class="article-title">${escapeHtml(currentArticle.title || '无标题')}</h1>
+    <div class="article-meta">
+      <span class="article-date">${formatDate(currentArticle.date)}</span>
+      ${currentArticle.tags && currentArticle.tags.length > 0 ? `
+        <span class="article-tags">
+          ${currentArticle.tags.map(tag => `<span class="article-tag">${escapeHtml(tag)}</span>`).join('')}
+        </span>
+      ` : ''}
+    </div>
+  `;
+}
+
+function updateTocOffset() {
+  if (window.innerWidth <= 1024) {
+    document.documentElement.style.setProperty('--toc-top', '12px');
+    return;
+  }
+
+  document.documentElement.style.setProperty('--toc-top', '24px');
+}
+
+function showLoading() {
+  if (articleHeadlineEl) {
+    articleHeadlineEl.innerHTML = '';
+  }
+  articleContentEl.innerHTML = `
+    <div class="loading-state">
+      <p>加载中...</p>
+    </div>
+  `;
+  if (articleCommentsHostEl) {
+    articleCommentsHostEl.innerHTML = '';
+  }
+}
+
+function showError(message) {
+  if (articleHeadlineEl) {
+    articleHeadlineEl.innerHTML = '';
+  }
+  articleContentEl.innerHTML = `
+    <div class="error-state">
+      <h3>出错了</h3>
+      <p>${message}</p>
+    </div>
+  `;
+  if (articleCommentsHostEl) {
+    articleCommentsHostEl.innerHTML = '';
+  }
+}
+
+function formatDate(dateString) {
+  if (!dateString) return '未知日期';
+
+  try {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  } catch (error) {
+    return dateString;
+  }
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+function stripFrontMatter(markdown) {
+  if (!markdown) return '';
+  return markdown.replace(/^\uFEFF?---\r?\n[\s\S]*?\r?\n---\r?\n?/, '');
+}
+
+function ensureHighlightThemeLink() {
+  let themeLink = document.getElementById('hljs-theme');
+  if (!themeLink) {
+    themeLink = document.createElement('link');
+    themeLink.id = 'hljs-theme';
+    themeLink.rel = 'stylesheet';
+    document.head.appendChild(themeLink);
+  }
+  themeLink.href = getHighlightThemeHref();
+}
+
+function getHighlightThemeHref() {
+  const mode = document.body.getAttribute('data-mode') === 'light' ? 'light' : 'dark';
+  const styleName = mode === 'light' ? 'github' : 'github-dark';
+  return `https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/${styleName}.min.css`;
+}
+
+function enhanceArticleLinks(sourcePath) {
+  const bodyEl = articleContentEl ? articleContentEl.querySelector('.article-body') : null;
+  if (!bodyEl) return;
+
+  const anchors = bodyEl.querySelectorAll('a[href]');
+  anchors.forEach((anchor) => {
+    const href = (anchor.getAttribute('href') || '').trim();
+    if (!href) return;
+
+    if (isExternalHttpLink(href)) {
+      anchor.target = '_blank';
+      anchor.rel = 'noopener noreferrer';
+      return;
+    }
+
+    anchor.addEventListener('click', async (event) => {
+      const rawHref = (anchor.getAttribute('href') || '').trim();
+      if (!rawHref) return;
+
+      if (rawHref.startsWith('#')) {
+        event.preventDefault();
+        scrollToLocalHash(rawHref);
+        return;
+      }
+
+      event.preventDefault();
+      const handled = await tryHandleInternalLink(rawHref, sourcePath);
+      if (!handled) {
+        window.location.href = rawHref;
+      }
+    });
+  });
+}
+
+function isExternalHttpLink(href) {
+  try {
+    const url = new URL(href, window.location.href);
+    return (url.protocol === 'http:' || url.protocol === 'https:') && url.origin !== window.location.origin;
+  } catch (error) {
+    return false;
+  }
+}
+
+function scrollToLocalHash(hashValue) {
+  const decoded = decodeURIComponent(hashValue.replace(/^#/, '')).trim();
+  if (!decoded) return;
+
+  const byId = document.getElementById(decoded);
+  if (byId) {
+    byId.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return;
+  }
+
+  const bodyEl = articleContentEl ? articleContentEl.querySelector('.article-body') : null;
+  if (!bodyEl) return;
+
+  const headings = bodyEl.querySelectorAll('h1, h2, h3, h4, h5, h6');
+  for (const heading of headings) {
+    const text = (heading.textContent || '').trim();
+    if (text === decoded) {
+      heading.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return;
+    }
+  }
+}
+
+async function tryHandleInternalLink(rawHref, sourcePath) {
+  try {
+    const url = new URL(rawHref, buildBaseUrl(sourcePath));
+    if (url.origin !== window.location.origin) return false;
+
+    if (url.pathname.endsWith('/article.html')) {
+      const nextId = (url.searchParams.get('id') || '').trim();
+      const nextDoc = (url.searchParams.get('doc') || '').trim();
+      if (nextId) {
+        await loadArticle(nextId);
+        history.pushState(null, '', `./article.html?id=${encodeURIComponent(nextId)}`);
+        return true;
+      }
+      if (nextDoc) {
+        await loadDocumentByPath(nextDoc);
+        history.pushState(null, '', `./article.html?doc=${encodeURIComponent(nextDoc)}`);
+        return true;
+      }
+      return false;
+    }
+
+    const pathNoSlash = normalizeDocPath(url.pathname);
+    if (!pathNoSlash || !/\.(md|html)$/i.test(pathNoSlash)) {
+      return false;
+    }
+
+    const index = await fetchArticlesIndex();
+    const matched = matchArticleByPath(index, pathNoSlash);
+    if (matched) {
+      await loadArticle(matched.id);
+      history.pushState(null, '', `./article.html?id=${encodeURIComponent(matched.id)}`);
+      return true;
+    }
+
+    const candidates = uniquePaths([pathNoSlash, (rawHref || '').replace(/^[./]+/, '')]);
+    for (const candidate of candidates) {
+      if (!candidate || !/\.(md|html)$/i.test(candidate)) continue;
+      try {
+        await loadDocumentByPath(candidate);
+        history.pushState(null, '', `./article.html?doc=${encodeURIComponent(candidate)}`);
+        return true;
+      } catch (error) {
+        // try next candidate
+      }
+    }
+    return false;
+  } catch (error) {
+    return false;
+  }
+}
+
+function buildBaseUrl(sourcePath) {
+  const normalized = normalizeDocPath(sourcePath || currentSourcePath || 'article.html');
+  if (!normalized) return window.location.href;
+  return new URL(normalized, window.location.origin + '/').toString();
+}
+
+function normalizeDocPath(pathValue) {
+  if (!pathValue || typeof pathValue !== 'string') return '';
+  return pathValue.replace(/^\/+/, '').trim();
+}
+
+function matchArticleByPath(index, pathNoSlash) {
+  const normalizedPath = pathNoSlash.toLowerCase();
+  const fileName = normalizedPath.split('/').pop();
+
+  return index.find((item) => {
+    const idPath = item && item.id ? `${item.id}`.toLowerCase() : '';
+    const filePath = item && item.file ? `articles/${item.file}`.toLowerCase() : '';
+    const itemFile = item && item.file ? `${item.file}`.toLowerCase() : '';
+    return normalizedPath === filePath || normalizedPath === itemFile || normalizedPath === idPath || normalizedPath === `${idPath}.md` || normalizedPath === `${idPath}.html` || fileName === itemFile;
+  }) || null;
+}
+
+function uniquePaths(paths) {
+  const set = new Set();
+  paths.forEach((item) => {
+    const normalized = normalizeDocPath(item);
+    if (normalized) set.add(normalized);
+  });
+  return Array.from(set);
+}
+
+function extractDocMeta(docPath, content) {
+  const normalized = typeof content === 'string' ? content.replace(/^\uFEFF/, '') : '';
+  const isMarkdown = /\.md$/i.test(docPath);
+  const fileName = docPath.split('/').pop() || '文档';
+
+  if (!isMarkdown) {
+    return {
+      title: extractHtmlTitle(normalized) || fileName,
+      date: '',
+      tags: []
+    };
+  }
+
+  const frontMatter = parseFrontMatter(normalized);
+  const titleFromBody = extractMarkdownTitle(stripFrontMatter(normalized));
+  return {
+    title: (frontMatter && frontMatter.title) || titleFromBody || fileName,
+    date: (frontMatter && frontMatter.date) || '',
+    tags: parseTags(frontMatter && frontMatter.tags)
+  };
+}
+
+function extractMarkdownTitle(content) {
+  const match = content.match(/^#\s+(.+)$/m);
+  return match ? match[1].trim() : '';
+}
+
+function extractHtmlTitle(content) {
+  const h1Match = content.match(/<h1[^>]*>([^<]+)<\/h1>/i);
+  if (h1Match) return h1Match[1].trim();
+  const titleMatch = content.match(/<title[^>]*>([^<]+)<\/title>/i);
+  return titleMatch ? titleMatch[1].trim() : '';
+}
+
+function parseFrontMatter(content) {
+  const match = content.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+  if (!match) return null;
+  const data = {};
+  const lines = match[1].split(/\r?\n/);
+  for (const line of lines) {
+    const [key, ...rest] = line.split(':');
+    if (!key || rest.length === 0) continue;
+    data[key.trim()] = rest.join(':').trim();
+  }
+  return data;
+}
+
+function parseTags(raw) {
+  if (!raw) return [];
+  if (Array.isArray(raw)) return raw.filter((tag) => typeof tag === 'string');
+  if (typeof raw !== 'string') return [];
+  if (!raw.includes(',')) return [raw.trim()].filter(Boolean);
+  return raw.split(',').map((tag) => tag.trim()).filter(Boolean);
+}
+

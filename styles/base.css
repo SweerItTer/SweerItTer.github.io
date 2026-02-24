@@ -1,0 +1,56 @@
+﻿:root {
+  --toc-width: 280px;
+  --toc-collapsed-width: 32px;
+  --content-max-width: 860px;
+  --content-padding: 32px;
+  --site-bg: #07080c;
+  --site-panel-bg: rgba(255, 255, 255, 0.03);
+  --site-panel-border: rgba(255, 255, 255, 0.12);
+  --site-accent: #7a95cf;
+  --toc-bg: rgba(255, 255, 255, 0.03);
+  --border-soft: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.2);
+  --text-soft: rgba(255, 255, 255, 0.7);
+  --text-strong: rgba(255, 255, 255, 0.95);
+  --surface-hover: rgba(255, 255, 255, 0.08);
+  --surface-active: rgba(122, 149, 207, 0.2);
+  --select-bg: rgba(255, 255, 255, 0.05);
+  --select-text: rgba(255, 255, 255, 0.9);
+  --select-border: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme='github'] {
+  --md-bg: #0a0a0a;
+  --md-text: rgba(255, 255, 255, 0.92);
+  --md-muted: rgba(255, 255, 255, 0.6);
+  --md-border: rgba(255, 255, 255, 0.08);
+  --md-code-bg: rgba(0, 0, 0, 0.35);
+  --md-accent: #667eea;
+}
+
+[data-mode='light'][data-theme='github'] {
+  --md-bg: #ffffff;
+  --md-text: #1f2328;
+  --md-muted: #59636e;
+  --md-border: #d0d7de;
+  --md-code-bg: #f6f8fa;
+  --md-accent: #0969da;
+}
+
+[data-theme='claude'] {
+  --md-bg: #11110f;
+  --md-text: #e8e1d6;
+  --md-muted: #b7afa2;
+  --md-border: #2a2926;
+  --md-code-bg: #1b1a18;
+  --md-accent: #d9a45b;
+}
+
+[data-mode='light'][data-theme='claude'] {
+  --md-bg: #faf7f1;
+  --md-text: #2f2922;
+  --md-muted: #665b4e;
+  --md-border: #ddd2c4;
+  --md-code-bg: #f0e7db;
+  --md-accent: #b8792b;
+}
