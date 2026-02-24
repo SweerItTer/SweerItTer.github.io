@@ -1,11 +1,11 @@
 ﻿export const siteConfig = {
   defaultTheme: 'github',
-  analytics: { provider: 'busuanzi', enabled: true },
+  analytics: { provider: 'giscus', enabled: true },
   giscus: {
     repo: 'SweerItTer/SweerItTer.github.io',
-    repoId: '',
+    repoId: 'R_kgDOOpJbbg',
     category: 'Announcements',
-    categoryId: ''
+    categoryId: 'DIC_kwDOOpJbbs4C3HJJ'
   },
   contentSource: {
     provider: 'github',
@@ -17,3 +17,4 @@
     fallbackFiles: ['hello-world.md']
   }
 };
+

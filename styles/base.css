@@ -28,6 +28,15 @@
   --md-accent: #667eea;
 }
 
+[data-mode='light'][data-theme='github'] {
+  --md-bg: #ffffff;
+  --md-text: #1f2328;
+  --md-muted: #59636e;
+  --md-border: #d0d7de;
+  --md-code-bg: #f6f8fa;
+  --md-accent: #0969da;
+}
+
 [data-theme='claude'] {
   --md-bg: #11110f;
   --md-text: #e8e1d6;
@@ -35,4 +44,13 @@
   --md-border: #2a2926;
   --md-code-bg: #1b1a18;
   --md-accent: #d9a45b;
+}
+
+[data-mode='light'][data-theme='claude'] {
+  --md-bg: #faf7f1;
+  --md-text: #2f2922;
+  --md-muted: #665b4e;
+  --md-border: #ddd2c4;
+  --md-code-bg: #f0e7db;
+  --md-accent: #b8792b;
 }

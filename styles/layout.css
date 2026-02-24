@@ -15,7 +15,7 @@
   position: sticky;
   top: var(--toc-top, 24px);
   max-height: calc(100vh - var(--toc-top, 24px) - 24px);
-  overflow: auto;
+  overflow: hidden;
   border: 1px solid var(--border-soft);
   border-radius: 16px;
   padding: 16px;
@@ -77,6 +77,14 @@
   margin-top: 30px;
 }
 
+.article-comments-host {
+  width: 100%;
+  max-width: none;
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 28px;
+}
+
 .comments-header {
   font-size: 1.05rem;
   font-weight: 600;
@@ -101,6 +109,10 @@
   list-style: none;
   margin: 0;
   padding: 0;
+  max-height: calc(100vh - var(--toc-top, 24px) - 110px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 4px;
 }
 
 .toc-item {
@@ -175,6 +187,39 @@
   justify-content: center;
   cursor: pointer;
   transition: transform 0.2s ease, color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.floating-top-btn {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  border: 1px solid var(--border-soft);
+  background: var(--select-bg);
+  color: var(--select-text);
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1100;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+  transition: opacity 0.2s ease, transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.floating-top-btn.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.floating-top-btn:hover {
+  background: var(--surface-hover);
+  border-color: var(--border-strong);
+  color: var(--text-strong);
 }
 
 .toc-top-btn:hover,
@@ -269,6 +314,17 @@
     width: 100%;
     max-width: none;
     margin-left: 0;
+  }
+
+  .article-comments-host {
+    max-width: none;
+    margin-left: 0;
+    margin-top: 20px;
+  }
+
+  .floating-top-btn {
+    right: 14px;
+    bottom: 14px;
   }
 }
 

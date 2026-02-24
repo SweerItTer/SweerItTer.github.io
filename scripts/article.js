@@ -12,6 +12,8 @@ let currentArticleId = null;
 let currentArticle = null;
 let articleContentEl = null;
 let articleHeadlineEl = null;
+let articleCommentsHostEl = null;
+let highlightThemeBound = false;
 let currentSourcePath = '';
 
 export function initArticle() {
@@ -19,8 +21,9 @@ export function initArticle() {
 
   articleContentEl = document.getElementById('article-content');
   articleHeadlineEl = document.getElementById('article-headline');
+  articleCommentsHostEl = document.getElementById('article-comments-host');
 
-  if (!articleContentEl || !articleHeadlineEl) {
+  if (!articleContentEl || !articleHeadlineEl || !articleCommentsHostEl) {
     console.error('Article content element not found');
     return;
   }
@@ -145,18 +148,22 @@ function initMarkdownParser() {
 }
 
 function initCodeHighlight() {
+  ensureHighlightThemeLink();
+
   if (typeof hljs === 'undefined') {
     const bundleScript = document.createElement('script');
     bundleScript.src = 'https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/highlight.min.js';
     bundleScript.async = true;
     document.head.appendChild(bundleScript);
+  }
 
-    const styleLink = document.createElement('link');
-    styleLink.rel = 'stylesheet';
-    styleLink.href = 'https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css';
-    document.head.appendChild(styleLink);
-
-    console.log('Highlight.js loaded successfully');
+  if (!highlightThemeBound) {
+    window.addEventListener('appearancechange', () => {
+      const themeLink = document.getElementById('hljs-theme');
+      if (!themeLink) return;
+      themeLink.href = getHighlightThemeHref();
+    });
+    highlightThemeBound = true;
   }
 }
 
@@ -164,7 +171,7 @@ function renderMarkdown(content, sourcePath) {
   if (typeof marked === 'undefined') {
     setTimeout(() => {
       if (typeof marked !== 'undefined') {
-        renderMarkdown(content);
+        renderMarkdown(content, sourcePath);
       } else {
         showError('Markdown 解析器加载失败');
       }
@@ -198,7 +205,7 @@ function renderMarkdown(content, sourcePath) {
   enhanceArticleLinks(sourcePath);
   buildTOC(articleContentEl);
   renderAnalytics(articleHeadlineEl);
-  addComments(articleContentEl);
+  addComments(articleCommentsHostEl);
   initAnalytics();
   updateTocOffset();
 }
@@ -218,7 +225,7 @@ function renderHTML(content, sourcePath) {
   enhanceArticleLinks(sourcePath);
   buildTOC(articleContentEl);
   renderAnalytics(articleHeadlineEl);
-  addComments(articleContentEl);
+  addComments(articleCommentsHostEl);
   initAnalytics();
   updateTocOffset();
 }
@@ -257,6 +264,9 @@ function showLoading() {
       <p>加载中...</p>
     </div>
   `;
+  if (articleCommentsHostEl) {
+    articleCommentsHostEl.innerHTML = '';
+  }
 }
 
 function showError(message) {
@@ -269,6 +279,9 @@ function showError(message) {
       <p>${message}</p>
     </div>
   `;
+  if (articleCommentsHostEl) {
+    articleCommentsHostEl.innerHTML = '';
+  }
 }
 
 function formatDate(dateString) {
@@ -295,6 +308,23 @@ function escapeHtml(text) {
 function stripFrontMatter(markdown) {
   if (!markdown) return '';
   return markdown.replace(/^\uFEFF?---\r?\n[\s\S]*?\r?\n---\r?\n?/, '');
+}
+
+function ensureHighlightThemeLink() {
+  let themeLink = document.getElementById('hljs-theme');
+  if (!themeLink) {
+    themeLink = document.createElement('link');
+    themeLink.id = 'hljs-theme';
+    themeLink.rel = 'stylesheet';
+    document.head.appendChild(themeLink);
+  }
+  themeLink.href = getHighlightThemeHref();
+}
+
+function getHighlightThemeHref() {
+  const mode = document.body.getAttribute('data-mode') === 'light' ? 'light' : 'dark';
+  const styleName = mode === 'light' ? 'github' : 'github-dark';
+  return `https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/${styleName}.min.css`;
 }
 
 function enhanceArticleLinks(sourcePath) {
@@ -500,3 +530,4 @@ function parseTags(raw) {
   if (!raw.includes(',')) return [raw.trim()].filter(Boolean);
   return raw.split(',').map((tag) => tag.trim()).filter(Boolean);
 }
+

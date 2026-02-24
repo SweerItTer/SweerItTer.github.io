@@ -1,14 +1,9 @@
 ﻿import { siteConfig } from '../../config/site-config.js';
-import { getCurrentAppearance, getGiscusThemeForMode } from '../ui/theme-switch.js';
-
-let giscusThemeBound = false;
+import { resolveDiscussionTerm } from './discussion-term.js';
 
 export function addComments(containerEl) {
   if (!containerEl) return;
-
-  if (document.querySelector('.giscus-container')) {
-    return;
-  }
+  containerEl.innerHTML = '';
 
   const section = document.createElement('div');
   section.className = 'comments-section';
@@ -30,7 +25,7 @@ export function addComments(containerEl) {
   containerEl.appendChild(section);
 
   const { giscus } = siteConfig;
-  if (!giscus || !giscus.repoId || !giscus.categoryId) {
+  if (!giscus || !giscus.repo || !giscus.repoId || !giscus.category || !giscus.categoryId) {
     commentsContainer.innerHTML = `
       <div style="text-align: center; color: var(--text-soft); padding: 20px;">
         <p>评论功能暂未启用</p>
@@ -44,10 +39,12 @@ export function addComments(containerEl) {
   script.src = 'https://giscus.app/client.js';
   script.async = true;
   script.crossOrigin = 'anonymous';
+
   script.onerror = () => {
     commentsContainer.innerHTML = `
       <div style="text-align: center; color: var(--text-soft); padding: 20px;">
         <p>评论功能加载失败</p>
+        <p style="font-size: 0.85rem; margin-top: 8px;">请检查网络、浏览器拦截策略或仓库 Discussions 设置</p>
       </div>
     `;
   };
@@ -61,35 +58,9 @@ export function addComments(containerEl) {
   script.setAttribute('data-strict', '0');
   script.setAttribute('data-reactions-enabled', '1');
   script.setAttribute('data-emit-metadata', '0');
-  script.setAttribute('data-input-position', 'bottom');
-  script.setAttribute('data-theme', getGiscusThemeForMode(getCurrentAppearance().mode));
+  script.setAttribute('data-input-position', 'top');
+  script.setAttribute('data-theme', 'preferred_color_scheme');
   script.setAttribute('data-lang', 'zh-CN');
 
   commentsContainer.appendChild(script);
-  bindGiscusTheme();
-}
-
-function resolveDiscussionTerm() {
-  const params = new URLSearchParams(window.location.search);
-  const articleId = (params.get('id') || '').trim();
-  if (articleId) {
-    return `article:${articleId}`;
-  }
-  return `path:${window.location.pathname}`;
-}
-
-function bindGiscusTheme() {
-  if (giscusThemeBound) return;
-  giscusThemeBound = true;
-
-  window.addEventListener('appearancechange', (event) => {
-    const mode = event.detail && event.detail.mode === 'light' ? 'light' : 'dark';
-    const iframe = document.querySelector('iframe.giscus-frame');
-    if (!iframe || !iframe.contentWindow) return;
-
-    iframe.contentWindow.postMessage(
-      { giscus: { setConfig: { theme: getGiscusThemeForMode(mode) } } },
-      'https://giscus.app'
-    );
-  });
 }

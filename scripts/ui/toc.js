@@ -3,7 +3,10 @@
 const TOC_HEADING_SELECTOR = '.article-body h2, .article-body h3, .article-body h4';
 const ACTIVE_TOP_OFFSET = 140;
 const CLICK_ACTIVE_LOCK_MS = 900;
+const TOP_BTN_VISIBLE_SCROLL = 24;
 let disposeScrollSpy = null;
+let floatingTopButton = null;
+let floatingTopButtonBound = false;
 
 export function buildTOC(articleContentEl) {
   const tocEl = document.getElementById('article-toc');
@@ -15,25 +18,7 @@ export function buildTOC(articleContentEl) {
 
   const header = document.createElement('div');
   header.className = 'article-toc-header';
-
-  const topBtn = document.createElement('button');
-  topBtn.className = 'toc-top-btn';
-  topBtn.type = 'button';
-  topBtn.setAttribute('aria-label', '回到顶部');
-  topBtn.innerHTML = `
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M18 15l-6-6-6 6"/>
-    </svg>
-  `;
-  topBtn.addEventListener('click', () => {
-    const articleContainer = document.getElementById('article-container');
-    if (articleContainer) {
-      articleContainer.scrollTo({ top: 0, behavior: 'smooth' });
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-    startTocChaseMotion(tocEl);
-  });
+  ensureFloatingTopButton(tocEl);
 
   const toggleBtn = document.createElement('button');
   toggleBtn.className = 'toc-toggle';
@@ -45,7 +30,6 @@ export function buildTOC(articleContentEl) {
     </svg>
   `;
 
-  header.appendChild(topBtn);
   header.appendChild(toggleBtn);
   tocEl.appendChild(header);
 
@@ -264,4 +248,54 @@ function startTocChaseMotion(tocEl) {
   tocEl.classList.remove('toc-chasing');
   void tocEl.offsetWidth;
   tocEl.classList.add('toc-chasing');
+}
+
+function ensureFloatingTopButton(tocEl) {
+  if (!floatingTopButton) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'floating-top-btn';
+    button.setAttribute('aria-label', '回到顶部');
+    button.innerHTML = `
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M18 15l-6-6-6 6"/>
+      </svg>
+    `;
+    document.body.appendChild(button);
+    floatingTopButton = button;
+  }
+
+  if (!floatingTopButtonBound) {
+    const scrollHost = getScrollHost();
+    const onScroll = () => {
+      const scrollTop = getScrollTop(scrollHost);
+      floatingTopButton.classList.toggle('is-visible', scrollTop > TOP_BTN_VISIBLE_SCROLL);
+    };
+
+    floatingTopButton.addEventListener('click', () => {
+      const host = getScrollHost();
+      if (host === window) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        host.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      startTocChaseMotion(tocEl);
+    });
+
+    scrollHost.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    onScroll();
+    floatingTopButtonBound = true;
+  }
+}
+
+function getScrollHost() {
+  return document.getElementById('article-container') || window;
+}
+
+function getScrollTop(host) {
+  if (host === window) {
+    return window.scrollY || document.documentElement.scrollTop || 0;
+  }
+  return host.scrollTop || 0;
 }

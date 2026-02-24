@@ -646,11 +646,12 @@ body {
 .global-settings-trigger:hover {
     background: var(--surface-hover);
     border-color: var(--border-strong);
-    transform: translateY(-1px);
 }
 
 .global-settings-menu {
-    margin-top: 10px;
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
     min-width: 252px;
     background: var(--site-panel-bg);
     border: 1px solid var(--site-panel-border);
